@@ -1,6 +1,6 @@
 <template>
   <view class="index">
-    认知检测
+    我的课程
   </view>
 </template>
 

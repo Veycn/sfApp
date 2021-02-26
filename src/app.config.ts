@@ -1,39 +1,46 @@
 export default {
   pages: [
-    'pages/index/index'
+    "pages/index/index",
+    "pages/customize/index",
+    "pages/mycourse/index",
+    "pages/user/index",
   ],
   window: {
-    backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
+    backgroundTextStyle: "light",
+    navigationBarBackgroundColor: "#000",
+    navigationBarTitleText: "WeChat",
+    navigationBarTextStyle: "white"
   },
-  // tabBar: {
-  //   list: [{
-  //     'iconPath': 'resource/latest.png',
-  //     'selectedIconPath': 'resource/lastest_on.png',
-  //     pagePath: 'pages/index/index',
-  //     text: '最新'
-  //   }, {
-  //     'iconPath': 'resource/hotest.png',
-  //     'selectedIconPath': 'resource/hotest_on.png',
-  //     pagePath: 'pages/hot/hot',
-  //     text: '热门'
-  //   }, {
-  //     'iconPath': 'resource/node.png',
-  //     'selectedIconPath': 'resource/node_on.png',
-  //     pagePath: 'pages/nodes/nodes',
-  //     text: '节点'
-  //   }],
-  //   'color': '#000',
-  //   'selectedColor': '#56abe4',
-  //   'backgroundColor': '#fff',
-  //   'borderStyle': 'white'
-  // },
-  // window: {
-  //   backgroundTextStyle: 'light',
-  //   navigationBarBackgroundColor: '#fff',
-  //   navigationBarTitleText: 'V2EX',
-  //   navigationBarTextStyle: 'black'
-  // }
-}
+  tabBar: {
+    list: [
+      {
+        pagePath: "pages/customize/index",
+        text: "定制课程",
+        iconPath: "assets/icon/b.png",
+        selectedIconPath: "assets/icon/b_active.png"
+      },
+      {
+        pagePath: "pages/index/index",
+        text: "认知检测",
+        iconPath: "assets/icon/a.png",
+        selectedIconPath: "assets/icon/a_active.png"
+      },
+      {
+        pagePath: "pages/mycourse/index",
+        text: "我的课程",
+        iconPath: "assets/icon/c.png",
+        selectedIconPath: "assets/icon/c_active.png"
+      },
+      {
+        pagePath: "pages/user/index",
+        text: "个人中心",
+        iconPath: "assets/icon/c.png",
+        selectedIconPath: "assets/icon/c_active.png"
+      }
+    ],
+    color: "#ffffff",
+    selectedColor: "#15EC89",
+    backgroundColor: "#000",
+    borderStyle: "black",
+  }
+};

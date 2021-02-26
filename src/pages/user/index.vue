@@ -1,6 +1,6 @@
 <template>
   <view class="index">
-    认知检测
+    个人中心
   </view>
 </template>
 
