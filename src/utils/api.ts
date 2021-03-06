@@ -3,7 +3,7 @@ import Services from "./http";
 const API = {
   getUserInfo: params => {
     return Services.get({
-      url: "",
+      url: "/api",
       params
     });
   }
