@@ -11,7 +11,7 @@ enum Type {
   POST = 'POST'
 }
 
-const request = (url: string, params: object, type?: Type) => {
+const request = (url: string, params: object, type: Type = Type.GET) => {
   let contentType: string = "";
   const userToken = Taro.getStorageSync("userToken");
   if (type === Type.POST) {
