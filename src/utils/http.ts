@@ -5,8 +5,12 @@ interface Http {
   post: Function;
   polling: Function;
 }
-
-const request = (url: string, params: object, type?: string) => {
+const BASE = 'https://www.shenfu.online/sfeduWx/';
+enum Method{
+  GET = 'GET',
+  POST = 'POST'
+}
+const request = (url: string, params: object, method: Method=Method.GET, type?: string,) => {
   let contentType: string = "";
   const userToken = Taro.getStorageSync("userToken");
   if (type === "form") {
@@ -14,9 +18,11 @@ const request = (url: string, params: object, type?: string) => {
   } else {
     contentType = "application/json";
   }
+  console.log(method);
   return Taro.request({
-    url,
+    url: BASE+url,
     data: params,
+    method: method,
     header: {
       "content-type": contentType,
       token: userToken
@@ -24,12 +30,12 @@ const request = (url: string, params: object, type?: string) => {
   });
 };
 
-const get = ({ url, params}) => {
-  return request(url, params);
+const get = ({ url, params }) => {
+  return request(url, params,Method.GET);
 };
 
 const post = ({ url, params, type }) => {
-  return request(url, params, type);
+  return request(url, params,Method.POST, type);
 };
 
 const polling = ({ url, params}) => {
