@@ -1,0 +1,70 @@
+<template>
+  <view class="c-wrapper">
+    <view class="content">
+      <view class="decorate">
+        <view class="item" wx:for="{{pointNumber}}" wx:key="index"></view>
+      </view>
+      <view class="text">
+        <view wx:for="{{titleList}}" wx:key="index" class="title"
+          >{{ item }} : <text class="data">{{ resultArr[index] }}</text></view
+        >
+      </view>
+    </view>
+  </view>
+</template>
+
+<script lang="ts">
+export default {};
+</script>
+
+<style lang="less">
+.content {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.decorate {
+  position: absolute;
+  left: 204rpx;
+  width: 100%;
+}
+.decorate > .item {
+  width: 18rpx;
+  height: 18rpx;
+  background: #ccc;
+  border-radius: 50%;
+  margin-bottom: 60rpx;
+  position: relative;
+}
+
+.decorate > .item::after {
+  content: "";
+  display: block;
+  width: 2rpx;
+  height: 78rpx;
+  background: #ccc;
+  position: absolute;
+  left: 9rpx;
+}
+
+.decorate > .item:last-child::after {
+  display: none;
+}
+
+.text {
+  position: absolute;
+  left: 250rpx;
+}
+
+.text .title {
+  margin-bottom: 46rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  height: 30rpx;
+  line-height: 30rpx;
+}
+
+.text > .title > .data {
+  color: #15da7f;
+}
+</style>

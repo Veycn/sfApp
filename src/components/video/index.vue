@@ -25,7 +25,9 @@
       <view class="base-info">
         <view class="video-desc">
           <view class="title">课程介绍</view>
-          <view class="introduction">一元一次方程详解：只含有一个未知数，且未知数的高次数是1等号两面都是整式，这样的方程叫做一元一次方程。</view>
+          <view class="introduction"
+            >一元一次方程详解：只含有一个未知数，且未知数的高次数是1等号两面都是整式，这样的方程叫做一元一次方程。</view
+          >
         </view>
         <view class="buy-info flex f-fd-r f-ai-b">
           <view class="buy-btn">购买课程</view>
@@ -48,145 +50,134 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Taro from "@tarojs/taro";
-import Mixins from "./index";
-export default Vue.extend({
-  name: "video-window",
+export default {
+  name: "",
   data() {
-    return {};
+    return {
+      didimg1: "../../assets/pic/paper1.png",
+      didimg2: "../../assets/pic/paper2.png",
+      didimg3: "../../assets/pic/paper3.png",
+      didimg4: "../../assets/pic/paper4.png",
+      nodidimg: "../../assets/pic/paper0.png",
+      status: 0,
+    };
   },
   methods: {
-    handleAction(type: string): void {
-      switch (type) {
-        case "like":
-          this.handleLike();
-          break;
-        case "share":
-          console.log("share");
-          this.handleShare();
-          break;
-        case "similar":
-          Taro.navigateTo({ url: "pages/similar/index?" });
-          break;
-        case "fullscreen":
-          break;
-        default:
+    // 判断status
+    toExam(e) {
+      console.log("exam", e);
+      let { knowledgepointid, examid, submitstatus } = e.currentTarget.dataset;
+      console.log(knowledgepointid, examid, submitstatus);
+      if (submitstatus === 0) {
+        Taro.navigateTo({
+          url: `/pages/exam/index?examId=${examid}`,
+        });
+      } else {
+        Taro.navigateTo({
+          url: `/pages/points/index?knowledgepointid=${knowledgepointid}&&examId=${examid}`,
+        });
       }
     },
-
-    handleLike() {
-      // const videoId = this.videoId;
-    },
-
-    handleShare() {},
   },
-  mixins: [Mixins],
-});
+};
 </script>
 
 <style lang="less">
-.video-wrapper {
+.sec-wrap {
+  width: 706rpx;
+  height: 200rpx;
+  margin: 3rpx auto 0;
+  border-radius: 10rpx;
+  background-color: #fff;
   position: relative;
-  height: 100%;
-  background-color: #000;
-  .operation {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 36px;
-    z-index: 1000;
-    .operate {
-      text-align: center;
-      margin-top: 40px;
-      color: #fff;
-      .operate-icon {
-        width: 50px;
-        height: 50px;
-
-      }
-      .operate-desc {
-        font-size: 20px;
-      }
-    }
-  }
-  .video {
-    .context {
-      min-width: 750px;
-      min-height: 514px;
-    }
-  }
-  .video-info{
-    position: absolute;
-    bottom: 0;
-    padding: 20px 20px 36px 40px;
-    color: #fff;
-    .base-info{
-      .video-desc{
-        .title{
-          font-size: 30px;
-          font-weight: bold;
-        }
-        .introduction{
-          margin-top: 12px;
-          font-size: 20px;
-          color: #fefefe;
-          font-weight: 400;
-        }
-      }
-      .buy-info{
-        margin-top: 42px;
-        .buy-btn{
-          width: 200px;
-          height: 50px;
-          background-color: #15EC89;
-          border-radius: 10px;
-          text-align: center;
-          line-height: 50px;
-          font-size: 30px;
-          font-weight: bold;
-          color: #000;
-        }
-        .buy-price{
-          font-size: bold;
-          color: #17E871;
-          margin-left: 38px;
-          align-self: flex-end;
-          height: 50px;
-          .price{
-            font-size: 48px;
-          }
-          .yuan{
-            font-size: 24px;
-          }
-        }
-        .buy-users{
-          margin-left: 42px;
-          font-size: 20px;
-          font-weight: 400;
-          align-self: flex-end;
-          position: relative;
-          top: 6px;
-        }
-      }
-    }
-    .teacher-info{
-      margin-left: 56px;
-      width: 120px;
-      font-size: 20px;
-      color: #fff;
-      .avatar{
-        width: 120px;
-        height: 120px;
-        border: 1px solid #fff;
-      }
-      .info{
-        .info-desc{
-          margin-top: 10px;
-        }
-      }
-    }
-  }
+}
+.sec-chapter {
+  position: absolute;
+  height: 40rpx;
+  width: 100%;
+  top: 24rpx;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+.sec-top {
+  width: 84rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  background-color: rgb(24, 219, 155);
+  border-radius: 6rpx;
+  color: #fff;
+  font-size: 20rpx;
+  font-family: "PingFang-SC-Regular";
+  text-align: center;
+}
+.scroll-view {
+  white-space: nowrap;
+  width: 580rpx;
+  overflow: auto;
+}
+.sec-name {
+  display: inline-block;
+  margin-left: 30rpx;
+  font-size: 38rpx;
+}
+.sec-ratio {
+  display: inline-block;
+  margin-left: 30rpx;
+  font-size: 20rpx;
+}
+.scroll {
+  position: absolute;
+  bottom: 36rpx;
+  left: 62rpx;
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+.test-papers {
+  width: 586rpx;
+  height: 74rpx;
+  white-space: nowrap;
+}
+.test-item {
+  width: 65rpx;
+  height: 73rpx;
+  position: relative;
+  display: inline-block;
+}
+.test-item-nofirst {
+  width: 65rpx;
+  height: 73rpx;
+  margin-left: 99rpx;
+  position: relative;
+  display: inline-block;
+}
+.test-item .image,
+.test-item-nofirst .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 65rpx;
+  height: 73rpx;
+}
+.test-papers .paper-name {
+  position: absolute;
+  top: 9rpx;
+  left: 2rpx;
+  font-size: 24rpx;
+  height: 73rpx;
+  width: 32rpx;
+  color: #fff;
+  white-space: pre-wrap;
+}
+.nopaper-name {
+  position: absolute;
+  font-size: 24rpx;
+  height: 73rpx;
+  line-height: 73rpx;
+  width: 60rpx;
+  text-align: center;
 }
 </style>
