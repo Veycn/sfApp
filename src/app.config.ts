@@ -4,6 +4,8 @@ export default {
     "pages/customize/index",
     "pages/mycourse/index",
     "pages/user/index",
+    "pages/tLogin/index",
+    "pages/income/index",
   ],
   window: {
     backgroundTextStyle: "light",
