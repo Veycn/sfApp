@@ -1,23 +1,23 @@
 <template>
   <view class="wrapper">
-    <view class="tag" style="background: {{activeColor}}"></view>
+    <view class="tag" :style="{ background: activeColor }"></view>
     <view class="title">
       <text class="text">{{ tagName }}</text>
     </view>
     <view class="content">
-      <block wx:for="{{renderList}}" wx:key="index">
+      <block v-for="(item, index) in renderList" :key="index">
         <view
           class="item"
-          catchtap="itemChoosed"
-          style="background: {{activeIndex === index ? activeColor : '#ccc'}}"
-          data-item="{{item}}"
-          data-index="{{index}}"
+          @tap="itemChoosed"
+          :style="{ background: activeIndex === index ? activeColor : '#ccc' }"
+          :data-item="item"
+          :data-index="index"
           >{{ item[type] }}</view
         >
       </block>
-      <block wx:if="{{type == 'grade'}}">
-        <view class="item" bindtap="showTip">高二</view>
-        <view class="item" bindtap="showTip">高三</view>
+      <block v-if="type === 'grade'">
+        <view class="item" @tap="showTip">高二</view>
+        <view class="item" @tap="showTip">高三</view>
       </block>
     </view>
   </view>
@@ -25,6 +25,12 @@
 
 <script lang="ts">
 export default {
+  props: {
+    tagName: String,
+    renderList: Array,
+    type: String,
+    activeColor: String,
+  },
   data() {
     return {
       activeIndex: -1,

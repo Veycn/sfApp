@@ -2,9 +2,9 @@
   <view class="p-wrapper">
     <view class="drw">
       <s-detectResult
-        resultArr="{{resultArr}}"
-        point-number="{{4}}"
-        title-list="{{titleList}}"
+        :resultArr="resultArr"
+        :point-number="4"
+        :title-list="titleList"
         class="dr"
       />
       <view class="line"></view>
@@ -14,15 +14,16 @@
         src="https://www.shenfu.online/pic/customize.png"
         class="img"
         mode="widthFix"
-        bindtap="toCourse"
+        @tap="toCourse"
       />
-      <view class="exit" bindtap="exit">退 出</view>
+      <view class="exit" @tap="exit">退 出</view>
     </view>
   </view>
 </template>
 
 <script>
 import DetectResult from "../../components/detectResult/index.vue";
+import Taro from "@tarojs/taro";
 
 export default {
   name: "Detect",
@@ -56,11 +57,11 @@ export default {
 
   methods: {
     exit() {
-      wx.switchTab({ url: "/pages/detect/index" });
+      Taro.switchTab({ url: "/pages/detect/index" });
     },
     toCourse() {
       app.globalData.hascustomize = true;
-      wx.switchTab({ url: "/pages/customize/index" });
+      Taro.switchTab({ url: "/pages/customize/index" });
     },
   },
   components: {

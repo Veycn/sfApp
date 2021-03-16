@@ -1,22 +1,30 @@
 <template>
   <view class="all-wrap">
-    <block wx:for="{{ allVersion }}" wx:key="index">
-      <block wx:if="{{ index%2 === 0}}">
+    <block v-for="(item, index) in allVersion" :key="index">
+      <block v-if="index % 2 === 0">
         <view
-          class="all-item all-item-left {{ choosed === index ? 'active' : '' }}"
-          bindtap="chooseVersion"
-          data-idx="{{item.id}}"
-          data-index="{{ index }}"
+          :class="[
+            'all-item',
+            'all-item-left',
+            choosed === index ? 'active' : '',
+          ]"
+          @tap="chooseVersion"
+          :data-idx="item.id"
+          :data-index="index"
         >
           {{ item.textbook }}
         </view>
       </block>
-      <block wx:else="{{ index%2 === 1}}">
+      <block v-else-if="index % 2 === 1">
         <view
-          class="all-item all-item-right {{ choosed === index ? 'active' : '' }}"
-          bindtap="chooseVersion"
-          data-idx="{{item.id}}"
-          data-index="{{ index }}"
+          :class="[
+            'all-item',
+            'all-item-right',
+            choosed === index ? 'active' : '',
+          ]"
+          @tap="chooseVersion"
+          :data-idx="item.id"
+          :data-index="index"
         >
           {{ item.textbook }}
         </view>

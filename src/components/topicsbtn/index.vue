@@ -1,10 +1,10 @@
 <template>
   <scroll-view scroll-y="true" class="container">
-    <block wx:for="{{ scantronList }}" wx:key="index">
+    <block v-for="(item, index) in scantronList" :key="index">
       <view
-        bindtap="rediretTopic"
-        data-index="{{index}}"
-        class="default {{ isFinshed[index] > -1 ? 'active' : 'init' }}"
+        @tap="rediretTopic"
+        :data-index="index"
+        :class="['default', isFinshed[index] > -1 ? 'active' : 'init']"
         >{{ index + 1 }}</view
       >
     </block>
@@ -13,6 +13,13 @@
 
 <script lang="ts">
 export default {
+  props: {
+    scantronList: Array,
+    isFinshed:Array,
+    submitAnswer: Object,
+    isK: Boolean,
+    spendTime: Number
+  },
   methods: {
     rediretTopic(e) {
       let currentIndex = e.currentTarget.dataset.index;

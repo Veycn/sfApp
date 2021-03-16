@@ -4,6 +4,9 @@ export default {
     "pages/customize/index",
     "pages/mycourse/index",
     "pages/user/index",
+    "pages/exam/index",
+    "pages/detect/index",
+    "pages/detectResult/index",
   ],
   window: {
     backgroundTextStyle: "light",

@@ -1,16 +1,16 @@
 <template>
   <view>
     <scroll-view class="scroll-view">
-      <view class="{{modal}}">
+      <view :class="modal">
         <view class="nocomplete">
           <view class="exit">
-            <image class="exit_img" bindtap="cancel" src="{{imgUrl}}" />
+            <image class="exit_img" @tap="cancel" :src="imgUrl" />
           </view>
           <view class="grade_box current">
             <view class="title">{{ title }}</view>
             <view class="choose">
-              <view class="btn-choose" bindtap="cancel">{{ errorbtn }}</view>
-              <view class="btn-choose" bindtap="confirm">{{ correctbtn }}</view>
+              <view class="btn-choose" @tap="cancel">{{ errorbtn }}</view>
+              <view class="btn-choose" @tap="confirm">{{ correctbtn }}</view>
             </view>
           </view>
         </view>

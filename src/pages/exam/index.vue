@@ -1,56 +1,60 @@
 <template>
   <view class="clock-container">
-    <view class="{{ isShowExitModal ? 'show':'hide' }}">
-      <s-exitmodal bindhideExitModal="hideExitModal" />
+    <view :class="[isShowExitModal ? 'show':'hide']">
+      <exit-modal @hideExitModal="hideExitModal" />
     </view>
-    <block wx:if="{{ isShowAnswerCard }}">
-      <s-answercard bindhideAnswerCard="hideAnswerCard" bindisSubmit="isSubmit">
-        <s-topicsbtn
-          submitAnswer="{{examTemp}}"
+    <block v-if="isShowAnswerCard">
+      <answer-card @hideAnswerCard="hideAnswerCard" @isSubmit="isSubmit">
+        <topics-btn
+          :submitAnswer="examTemp"
           slot="scantron"
-          isFinshed="{{ userAnswers }}"
-          bindrediretTopic="rediretTopic"
-          scantron-list="{{ topicsList }}"
-          bindhideAnswerCard="hideAnswerCard"
-          spendTime="{{spendTime}}"
+          @rediretTopic="rediretTopic"
+          @hideAnswerCard="hideAnswerCard"
+          :isFinshed="userAnswers"
+          :scantron-list="topicsList"
+          :spendTime="spendTime"
         />
-      </s-answercard>
+      </answer-card>
     </block>
     <view class="clock-wrap">
       <view class="clock-list">
-        <view class="timer {{type == 'isKnowledge' ? 'hide' : ''}}">
+        <view :class="['timer', type == 'isKnowledge' ? 'hide' : '']">
           <view class="item-one">
-            <image class="img" mode="widthFix" src="{{szimg}}" />
+            <image class="img" mode="widthFix" :src="szimg" />
             <text class="item-text">{{ minutes }}:{{ seconds }}</text>
           </view>
         </view>
-        <view class="answer-card" bindtap="showAnswerCard">答题卡/提交</view>
+        <view class="answer-card" @tap="showAnswerCard">答题卡/提交</view>
         <view>{{ topicsList.length }}/{{ currentTopicIndex + 1 }}</view>
       </view>
     </view>
 
     <view class="topic-wrap">
-      <swiper bindchange="nextTopic" current="{{ currentTopicIndex }}">
-        <block wx:for="{{ topicsList }}" wx:key="index">
+      <swiper @change="nextTopic" :current="currentTopicIndex">
+        <block v-for="(item, index) in topicsList" :key="index">
           <swiper-item>
             <view>
               <view class="topic-img">
-                <image mode="widthFix" src="{{ item.url }}" />
+                <image mode="widthFix" :src="item.url" />
               </view>
               <view class="quetype">
                 <view class="quetype-con">
                   <view class="item"
-                    ><image mode="widthFix" src="{{ tyimg }}" />单选题</view
+                    ><image mode="widthFix" :src="tyimg" />单选题</view
                   >
                 </view>
               </view>
               <view class="btn-wrap">
-                <block wx:for="{{ answerLists }}" wx:key="index">
+                <block v-for="(item, index) in answerLists" :key="index">
                   <view
-                    wx:if="{{type == 'isKnowledge'}}"
-                    class="q btn-item {{ choosedTopicIndex===index?'active' : '' }}"
-                    data-index="{{ index }}"
-                    bindtap="getUserAnswer"
+                    v-if="type === 'isKnowledge'"
+                    :class="[
+                      'q',
+                      'btn-item',
+                      choosedTopicIndex === index ? 'active' : '',
+                    ]"
+                    :data-index="index"
+                    @tap="getUserAnswer"
                     >{{
                       choosedTopicIndex === index &&
                       topicsList[currentTopicIndex]["userAnswer"] ===
@@ -62,10 +66,13 @@
                   >
 
                   <view
-                    wx:else
-                    class="btn-item {{ choosedTopicIndex===index?'active':'abc' }}"
-                    data-index="{{ index }}"
-                    bindtap="getUserAnswer"
+                    v-else
+                    :class="[
+                      'btn-item',
+                      choosedTopicIndex === index ? 'active' : 'abc',
+                    ]"
+                    :data-index="index"
+                    @tap="getUserAnswer"
                   >
                     {{ item }}
                   </view>
@@ -87,6 +94,7 @@
 
 <script>
 const { request, getHeader } = require("../../utils/request.js");
+import Taro from "@tarojs/taro";
 const header = {
   "content-type": "application/json",
 };
@@ -96,6 +104,16 @@ import TopicsBtn from "../../components/topicsbtn/index.vue";
 import AnswerCard from "../../components/answercard/index.vue";
 
 export default {
+  props: {
+    currentSubjects: {
+      type: Array,
+      value: []
+    },
+    isTap: {
+      type: Boolean,
+      value: false
+    }
+  },
   data() {
     return {
       szimg: "../../assets/icon/clock.png",
@@ -318,7 +336,7 @@ export default {
     subOrSaveReq(sign = "submit") {
       console.log("submit");
       if (sign === "submit") {
-        wx.showLoading({
+        Taro.showLoading({
           title: "加载中...",
           icon: "none",
         });
@@ -335,14 +353,15 @@ export default {
         this.getDoneQue();
 
         if (this.data.type === "isKnowledge") {
-          url = "https://www.shenfu.online/sfeduWx/api/exam/dealKnowledgeExam";
+          url =
+            "https://www.shenfu.online/sfeduTaro/api/exam/dealKnowledgeExam";
           data = this.data.examKnowledgeTemp;
         } else {
-          url = "https://www.shenfu.online/sfeduWx/api/exam/dealSectionExam";
+          url = "https://www.shenfu.online/sfeduTaro/api/exam/dealSectionExam";
           data = this.data.examSectionTemp;
         }
         console.log(data);
-        wx.request({
+        Taro.request({
           url: url,
           data: data,
           method: "post", // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
@@ -351,7 +370,7 @@ export default {
             console.log(res);
             if (sign === "submit") {
               if (this.data.type === "isKnowledge") {
-                wx.hideLoading();
+                Taro.hideLoading();
                 this.setData({
                   type: "",
                 });
@@ -361,12 +380,12 @@ export default {
                   examId: this.data.examId,
                 });
                 prevPage.getList(prevPage.data.examId);
-                wx.navigateBack({
+                Taro.navigateBack({
                   delta: 1,
                 });
               } else {
-                wx.hideLoading();
-                wx.reLaunch({
+                Taro.hideLoading();
+                Taro.reLaunch({
                   url: `/pages/detectResult/index?data=${JSON.stringify(
                     res.data.data
                   )}`,
@@ -379,7 +398,7 @@ export default {
           },
           // 防止请求不成功一直 loading
           complete: () => {
-            wx.hideLoading();
+            Taro.hideLoading();
           },
         });
       });

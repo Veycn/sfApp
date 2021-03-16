@@ -1,32 +1,32 @@
 <template>
   <view class="p-container">
     <scroll-view class="scroll-wrap" scroll-y="true">
-      <s-chooseBoard
+      <choose-board
         tag-name="科目"
-        render-list="{{allGrades}}"
+        :render-list="allGrades"
         type="subject"
         active-color="#85F267"
-        bindtagBeChoosed="gradeChoosed"
-      ></s-chooseBoard>
-      <s-chooseBoard
+        @tagBeChoosed="gradeChoosed"
+      ></choose-board>
+      <choose-board
         tag-name="教材"
-        render-list="{{currentSubjects}}"
+        :render-list="currentSubjects"
         type="textbook"
         active-color="#15DA7F"
-        bindtagBeChoosed="subjectChoosed"
-      ></s-chooseBoard>
-      <s-chooseBoard
+        @tagBeChoosed="subjectChoosed"
+      ></choose-board>
+      <choose-board
         tag-name="版本"
-        render-list="{{allVersion}}"
+        :render-list="allVersion"
         type="textbookVersion"
         active-color="#15DABC"
-        bindtagBeChoosed="versionChoosed"
-      ></s-chooseBoard>
-      <view class="to-learn" bindtap="startStudy">
+        @tagBeChoosed="versionChoosed"
+      ></choose-board>
+      <view class="to-learn" @tap="startStudy">
         <image class="pic" src="../../assets/pic/icon_open.png" />
       </view>
-      <block wx:if="{{ isChoosed }}">
-        <s-tipWindows bindexitModal="exitModal" />
+      <block v-if="isChoosed">
+        <tip-windows @exitModal="exitModal" />
       </block>
     </scroll-view>
   </view>
@@ -39,6 +39,8 @@ import AllSubjects from "../../components/allsubjects/index.vue";
 import AllVersion from "../../components/allversion/index.vue";
 import ChooseBoard from "../../components/chooseBoard/index.vue";
 import TipWindows from "../../components/tipWindows/index.vue";
+import Taro from "@tarojs/taro";
+const { request } = require("../../utils/request.js");
     
 export default {
   name: "Index",
@@ -57,7 +59,7 @@ export default {
       allVersion: [],
       isStartStudy: false,
       hasUserInfo: false,
-      canIUse: wx.canIUse("button.open-type.getUserInfo"),
+      canIUse: Taro.canIUse("button.open-type.getUserInfo"),
       userInfo: {},
       isChoosed: false,
       choosedSubject: "",
@@ -70,42 +72,39 @@ export default {
   },
   methods: {
     startStudy() {
-      if (this.data.isStartStudy) {
-        const { choosedSubject, choosedBook, choosedVersion } = this.data;
-        const choosedTitle = choosedSubject + choosedBook + choosedVersion;
+      console.log('startStudy', this.isStartStudy);
+      console.log(this.data);
+      if (this.isStartStudy) {
+        const choosedTitle = this.choosedSubject + this.choosedBook + this.choosedVersion;
         console.log(`选中的信息是:`);
         console.log(choosedTitle);
-        app.globalData.requestMsg = this.data.getversion;
-        // app.globalData.choosedTitle = choosedTitle
-        wx.setStorage({
+        app.globalData.requestMsg = this.getversion;
+        Taro.setStorage({
           key: "choosedTitle",
           data: choosedTitle,
         });
         request(
           "api/userInfo/addUserInfo",
           "post",
-          this.data.getversion,
+          this.getversion,
           (res) => {
             console.log(res);
           },
           "form"
         );
-        wx.switchTab({ url: `../detect/index` });
+        Taro.switchTab({ url: `../detect/index` });
       } else {
-        this.setData({
-          isChoosed: true,
-        });
+        this.isChoosed = true;
       }
     },
     exitModal() {
-      this.setData({
-        isChoosed: false,
-      });
+      this.isChoosed = false;
     },
 
     getAllGrades() {
       request("api/userInfo/getSubjectList", "get", {}, (res) => {
-        this.setData({ allGrades: res.data });
+        console.log('getAllGrades', res);
+        this.allGrades = res.data;
       });
     },
     getSubjects(id) {
@@ -114,7 +113,7 @@ export default {
         "get",
         { subjectId: id },
         (res) => {
-          this.setData({ currentSubjects: res.data });
+          this.currentSubjects = res.data;
         }
       );
     },
@@ -124,16 +123,14 @@ export default {
         "get",
         { textbookId: id },
         (res) => {
-          this.setData({ allVersion: res.data });
+          this.allVersion = res.data;
         }
       );
     },
     getUserInfo: function (e) {
       app.globalData.userInfo = e.detail.userInfo;
-      this.setData({
-        userInfo: e.detail.userInfo,
-        hasUserInfo: true,
-      });
+      this.userInfo = e.detail.userInfo;
+      this.hasUserInfo = true;
     },
 
     userLogin: function () {
@@ -150,7 +147,7 @@ export default {
         "api/userAccount/login",
         "post",
         {
-          wxUserInfo: {
+          TaroUserInfo: {
             code,
             nickName,
             gender,

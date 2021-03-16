@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "sfApp",
   "description": "深辅小程序",
-  "appid": "wxe5eb2f345aa2c46e",
+  "appid": "wx33c639555ff78ca4",
   "setting": {
     "urlCheck": true,
     "es6": false,
@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -40,5 +40,7 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
   "condition": {}
 }

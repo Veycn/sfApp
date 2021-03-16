@@ -1,12 +1,12 @@
 <template>
-  <view class="container" animation="{{modalAnimation}}">
-    <view class="content" animation="{{btnAnimation}}">
-      <view class="exit" bindtap="onClose">
+  <view class="container" :animation="modalAnimation">
+    <view class="content" :animation="btnAnimation">
+      <view class="exit" @tap="onClose">
         答题卡
         <image class="img" src="../../assets/icon/exit_pic.png" />
       </view>
       <slot name="scantron" />
-      <view class="tip" bindtap="watchResult">交卷并查看结果</view>
+      <view class="tip" @tap="watchResult">交卷并查看结果</view>
     </view>
   </view>
 </template>

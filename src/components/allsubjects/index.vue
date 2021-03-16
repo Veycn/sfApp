@@ -1,11 +1,11 @@
 <template>
   <view class="all-wrap">
-    <block wx:for="{{ currentSubjects }}" wx:key="index">
+    <block v-for="(item, index) in currentSubjects" :key="index">
       <view
-        class="all-item {{ choosed === index ? 'active' : '' }}"
-        bindtap="choosedSubject"
-        data-idx="{{ item.id }}"
-        data-index="{{ index }}"
+        :class="['all-item', choosed === index ? 'active' : '']"
+        @tap="choosedSubject"
+        :data-idx="item.id"
+        :data-index="index"
       >
         {{ item.subject }}
       </view>

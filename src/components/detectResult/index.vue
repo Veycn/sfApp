@@ -2,12 +2,16 @@
   <view class="c-wrapper">
     <view class="content">
       <view class="decorate">
-        <view class="item" wx:for="{{pointNumber}}" wx:key="index"></view>
+        <view
+          class="item"
+          v-for="(item, index) in pointNumber"
+          :key="index"
+        ></view>
       </view>
       <view class="text">
-        <view wx:for="{{titleList}}" wx:key="index" class="title"
-          >{{ item }} : <text class="data">{{ resultArr[index] }}</text></view
-        >
+        <view v-for="(item, index) in titleList" :key="index" class="title">
+          {{ item }} : <text class="data">{{ resultArr[index] }}</text>
+        </view>
       </view>
     </view>
   </view>

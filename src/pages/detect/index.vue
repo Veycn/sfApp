@@ -3,40 +3,46 @@
     <official-account></official-account>
     <swiper
       class="swiper"
-      indicator-dots="{{indicatorDots}}"
-      autoplay="{{autoplay}}"
-      interval="{{interval}}"
-      duration="{{duration}}"
+      :indicator-dots="indicatorDots"
+      :autoplay="autoplay"
+      :interval="interval"
+      :duration="duration"
     >
-      <block wx:for="{{background}}" wx:key="*this">
+      <block v-for="(item, index) in background" :key="index">
         <swiper-item>
-          <view data-url="{{item}}" bindtap="skip" class="swiper-item"
-            ><image class="lbt" src="{{item}}"
-          /></view>
+          <view 
+          :data-url="item" 
+          @tap="skip" 
+          class="swiper-item"
+            >
+            <image class="lbt" :src="item" />
+          </view>
         </swiper-item>
       </block>
     </swiper>
     <view class="header">
       <view class="chapter">
         <image class="img" src="https://www.shenfu.online/pic/Image.png" />
-        <view class="txt"
-          >{{ subjectVersion
-          }}<image
+        <view class="txt">
+          {{ subjectVersion }}
+          <image
             class="down"
-            bindtap="reselect"
+            @tap="reselect"
             src="../../assets/pic/down.png"
-        /></view>
+          />
+        </view>
         <view class="tip">欢迎使用深辅智能在线教育</view>
       </view>
       <view class="scroll">
         <scroll-view class="scroller" scroll-x="true" style="width: 100%">
-          <block wx:for="{{chapters}}" wx:key="index">
+          <block v-for="(item, index) in chapters" :key="index">
             <view
               id=""
-              class="item {{activeIndex === index ? '_active' : ''}}"
-              data-item="{{item}}"
-              data-index="{{index}}"
-              catchtap="chapterTap"
+              class="item"
+              :class="activeIndex === index ? '_active' : ''"
+              :data-item="item"
+              :data-index="index"
+              @tap="chapterTap"
             >
               {{ item.chapter }}
             </view>
@@ -45,9 +51,9 @@
       </view>
     </view>
     <view class="section-list">
-      <block wx:for="{{seclist}}" wx:key="index">
+      <block v-for="(item,index) in seclist" :key="index">
         <view class="sec-wraps">
-          <s-sectionlist seclist="{{item}}" first="{{index}}" />
+          <section-list :seclist="item" :first="index" />
         </view>
       </block>
     </view>
@@ -56,6 +62,7 @@
 
 <script>
 const { request } = require("../../utils/request.js");
+import Taro from "@tarojs/taro";
 const app = Taro.getApp();
 import SectionList from "../../components/sectionList/index.vue";
 
@@ -173,7 +180,7 @@ export default {
           if (res.status === 200) {
             this.setData({
               seclist: res.data,
-              list: res.data
+              list: res.data,
             });
             // this.setData({
             //   list: res.data,
@@ -238,7 +245,7 @@ export default {
     },
   },
   components: {
-    SectionList
+    SectionList,
   },
 };
 </script>
