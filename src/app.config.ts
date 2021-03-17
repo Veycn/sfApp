@@ -7,6 +7,8 @@ export default {
     "pages/exam/index",
     "pages/detect/index",
     "pages/detectResult/index",
+    "pages/tLogin/index",
+    "pages/income/index",
   ],
   window: {
     backgroundTextStyle: "light",
