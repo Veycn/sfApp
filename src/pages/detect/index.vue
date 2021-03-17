@@ -10,11 +10,7 @@
     >
       <block v-for="(item, index) in background" :key="index">
         <swiper-item>
-          <view 
-          :data-url="item" 
-          @tap="skip" 
-          class="swiper-item"
-            >
+          <view :data-url="item" @tap="skip" class="swiper-item">
             <image class="lbt" :src="item" />
           </view>
         </swiper-item>
@@ -25,11 +21,7 @@
         <image class="img" src="https://www.shenfu.online/pic/Image.png" />
         <view class="txt">
           {{ subjectVersion }}
-          <image
-            class="down"
-            @tap="reselect"
-            src="../../assets/pic/down.png"
-          />
+          <image class="down" @tap="reselect" src="../../assets/pic/down.png" />
         </view>
         <view class="tip">欢迎使用深辅智能在线教育</view>
       </view>
@@ -51,7 +43,7 @@
       </view>
     </view>
     <view class="section-list">
-      <block v-for="(item,index) in seclist" :key="index">
+      <block v-for="(item, index) in seclist" :key="index">
         <view class="sec-wraps">
           <section-list :seclist="item" :first="index" />
         </view>
@@ -61,7 +53,7 @@
 </template>
 
 <script>
-const { request } = require("../../utils/request.js");
+import request from "../../utils/http";
 import Taro from "@tarojs/taro";
 const app = Taro.getApp();
 import SectionList from "../../components/sectionList/index.vue";
@@ -90,11 +82,9 @@ export default {
   onLoad: function (options) {
     this.launch();
     let { activeIndex } = this.data;
-    request("api/exam/getChapterList", "get", {}, (res) => {
+    request.get("api/exam/getChapterList", "get", {}, (res) => {
       if (res.status == 200) {
-        this.setData({
-          chapters: res.data,
-        });
+        this.chapters = res.data;
         this.getSections(res.data && res.data[activeIndex].id);
       }
     });
@@ -103,9 +93,7 @@ export default {
     try {
       var choosedTitle = Taro.getStorageSync("choosedTitle");
       if (choosedTitle) {
-        this.setData({
-          subjectVersion: choosedTitle,
-        });
+        this.subjectVersion = choosedTitle;
       }
     } catch (e) {
       console.log("从缓存中获取choosedTitle失败！");
@@ -114,9 +102,7 @@ export default {
     let { activeIndex } = this.data;
     request("api/exam/getChapterList", "get", {}, (res) => {
       if (res.status == 200) {
-        this.setData({
-          chapters: res.data,
-        });
+        this.chapters = res.data;
         this.getSections(res.data && res.data[activeIndex].id);
       } else {
         Taro.navigateTo({
@@ -152,22 +138,17 @@ export default {
     },
     changeChapter: function (e) {
       let { c, i } = e.currentTarget.dataset;
-      this.setData({
-        activeChapter: c.substring(0, 3),
-        activeChapterId: i,
-        isToastShow: false,
-      });
+
+      this.activeChapter = c.substring(0, 3);
+      this.activeChapterId = i;
+      this.isToastShow = false;
       this.getSections();
     },
     openToast: function () {
-      this.setData({
-        isToastShow: true,
-      });
+      this.isToastShow = true;
     },
     closeToast() {
-      this.setData({
-        isToastShow: false,
-      });
+      this.isToastShow = false;
     },
     getSections(id) {
       request(
@@ -178,13 +159,8 @@ export default {
         },
         (res) => {
           if (res.status === 200) {
-            this.setData({
-              seclist: res.data,
-              list: res.data,
-            });
-            // this.setData({
-            //   list: res.data,
-            // });
+            this.seclist = res.data;
+            this.list = res.data;
           } else {
             Taro.showToast({
               title: res.msg | "请求异常！",
@@ -197,9 +173,7 @@ export default {
     },
     chapterTap(e) {
       let { item, index } = e.currentTarget.dataset;
-      this.setData({
-        activeIndex: index,
-      });
+      this.activeIndex = index;
       this.getSections(item.id);
     },
     onCustomTap(e) {
@@ -262,18 +236,18 @@ page {
 }
 
 .swiper {
-  height: 296rpx;
+  height: 296px;
   width: 100%;
 }
 .swiper-item {
-  height: 296rpx;
+  height: 296px;
   width: 100%;
-  line-height: 296rpx;
+  line-height: 296px;
   text-align: center;
 }
 .banner {
   width: 100%;
-  height: 294rpx;
+  height: 294px;
 }
 
 .banner > .ba {
@@ -287,51 +261,51 @@ page {
 
 .header .chapter {
   box-sizing: border-box;
-  padding: 40rpx 78rpx 10rpx;
+  padding: 40px 78px 10px;
   position: relative;
   background-image: url("https://www.shenfu.online/pic/Image.png");
   background-repeat: no-repeat;
-  background-size: 120rpx 74rpx;
-  background-position: 38rpx 40rpx;
+  background-size: 120px 74px;
+  background-position: 38px 40px;
 }
 
 .header .chapter .img {
-  width: 120rpx;
-  height: 74rpx;
+  width: 120px;
+  height: 74px;
   vertical-align: middle;
   position: absolute;
-  left: 40rpx;
+  left: 40px;
   z-index: -1;
 }
 
 .lbt {
   width: 100%;
-  height: 296rpx;
+  height: 296px;
 }
 
 .header .chapter .txt {
   font-weight: bold;
-  font-size: 48rpx;
-  padding-bottom: 20rpx;
+  font-size: 48px;
+  padding-bottom: 20px;
 }
 
 .header .chapter .txt .down {
-  width: 31rpx;
-  height: 31rpx;
-  margin-left: 17rpx;
+  width: 31px;
+  height: 31px;
+  margin-left: 17px;
 }
 
 .header .chapter .tip {
-  font-size: 24rpx;
+  font-size: 24px;
   color: #1c1b1b;
 }
 .scroll {
-  width: 588rpx;
+  width: 588px;
   margin: auto;
 }
 .scroll .scroller {
   width: 100%;
-  height: 100rpx;
+  height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -343,11 +317,11 @@ page {
   display: inline-block;
   height: 100%;
   text-align: center;
-  margin-right: 90rpx;
-  font-size: 30rpx;
+  margin-right: 90px;
+  font-size: 30px;
   font-weight: bold;
   box-sizing: border-box;
-  padding-top: 24rpx;
+  padding-top: 24px;
   border-bottom: 1px solid transparent;
 }
 
@@ -357,15 +331,15 @@ page {
 }
 
 .p-container .section-list {
-  width: 710rpx;
-  margin: 20rpx auto;
+  width: 710px;
+  margin: 20px auto;
   background-color: rgb(240, 242, 245);
-  padding-bottom: 20rpx;
+  padding-bottom: 20px;
 }
 
 .p-container .section-list .sec-wraps {
-  width: 705rpx;
-  margin: 0 auto 15rpx;
+  width: 705px;
+  margin: 0 auto 15px;
 }
 
 .slide-image {

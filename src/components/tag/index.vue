@@ -7,10 +7,10 @@
 
 <style lang="less">
 .tag-wrap {
-  width: 120rpx;
-  line-height: 60rpx;
-  border-radius: 6rpx;
-  border: 1rpx solid #434343;
+  width: 120px;
+  line-height: 60px;
+  border-radius: 6px;
+  border: 1px solid #434343;
   opacity: 0.3;
   text-align: center;
 }

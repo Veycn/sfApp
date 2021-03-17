@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+import Taro from '@tarojs/taro';
 export default {
   data() {
     return {
@@ -30,12 +31,12 @@ export default {
 
   methods: {
     cancel: function () {
-      this.triggerEvent("hideExitModal", {
+      Taro.eventCenter.trigger("hideExitModal", {
         isExitDetect: false,
       });
     },
     confirm: function () {
-      this.triggerEvent("hideExitModal", {
+      Taro.eventCenter.trigger("hideExitModal", {
         isExitDetect: true,
       });
     },
@@ -56,13 +57,13 @@ export default {
 .nocomplete {
   z-index: 1000;
   position: fixed;
-  width: 720rpx;
+  width: 720px;
   background-color: #fff;
-  height: 424rpx;
-  top: 430rpx;
-  left: -360rpx;
+  height: 424px;
+  top: 430px;
+  left: -360px;
   margin-left: 50%;
-  border-radius: 10rpx;
+  border-radius: 10px;
 }
 .scroll-view {
   z-index: 1000;
@@ -70,20 +71,20 @@ export default {
 }
 .exit {
   float: right;
-  width: 64rpx;
-  height: 64rpx;
-  margin-bottom: 10rpx;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 10px;
 }
 .exit_img {
-  width: 64rpx;
-  height: 64rpx;
+  width: 64px;
+  height: 64px;
 }
 
 .grade_box {
   display: flex;
   flex-direction: column;
-  width: 720rpx;
-  height: 346rpx;
+  width: 720px;
+  height: 346px;
   justify-content: space-around;
   background-color: #fff;
   opacity: 1;
@@ -95,29 +96,29 @@ export default {
   font-family: "PingFang-SC-Regular";
 }
 .title {
-  width: 400rpx;
-  height: 60rpx;
-  line-height: 60rpx;
+  width: 400px;
+  height: 60px;
+  line-height: 60px;
   font-family: PingFang-SC-Regular;
-  font-size: 36rpx;
-  margin: 20rpx auto;
+  font-size: 36px;
+  margin: 20px auto;
   text-align: center;
 }
 .choose {
-  width: 512rpx;
-  height: 88rpx;
-  margin: 10rpx auto;
+  width: 512px;
+  height: 88px;
+  margin: 10px auto;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
 .btn-choose {
-  width: 200rpx;
-  height: 80rpx;
-  line-height: 80rpx;
+  width: 200px;
+  height: 80px;
+  line-height: 80px;
   background-color: #fcdd29;
   text-align: center;
   font-family: PingFang-SC-Regular;
-  border-radius: 10rpx;
+  border-radius: 10px;
 }
 </style>

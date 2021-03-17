@@ -1,6 +1,6 @@
 <template>
   <view class="clock-container">
-    <view :class="[isShowExitModal ? 'show':'hide']">
+    <view :class="[isShowExitModal ? 'show' : 'hide']">
       <exit-modal @hideExitModal="hideExitModal" />
     </view>
     <block v-if="isShowAnswerCard">
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-const { request, getHeader } = require("../../utils/request.js");
+const { request, getHeader } = require("../../utils/http.ts");
 import Taro from "@tarojs/taro";
 const header = {
   "content-type": "application/json",
@@ -107,12 +107,12 @@ export default {
   props: {
     currentSubjects: {
       type: Array,
-      value: []
+      value: [],
     },
     isTap: {
       type: Boolean,
-      value: false
-    }
+      value: false,
+    },
   },
   data() {
     return {
@@ -160,27 +160,28 @@ export default {
   },
 
   onLoad: function (options) {
+    Taro.eventCenter.on("hideAnswerCard", this.hideAnswerCard);
+    Taro.eventCenter.on("rediretTopic", this.hideAnswerCard);
+    Taro.eventCenter.on("isSubmit", this.hideAnswerCard);
     if (options.isKnowledge) {
-      this.setData({
-        type: "isKnowledge",
-        examId: options.examId,
-        sectionId: options.sectionId,
-        sectionName: options.sectionName,
-      });
+      this.type = "isKnowledge";
+      this.examId = options.examId;
+      this.sectionId = options.sectionId;
+      this.sectionName = options.sectionName;
     }
     this.getTopicsList(options.examId, options.knowledgePointId);
   },
   onShow: function () {
-    if (this.data.isKnowledge !== "isKnowledge") {
+    if (this.isKnowledge !== "isKnowledge") {
       this.autoSave();
     }
   },
   onUnload: function () {
-    if (this.data.isKnowledge !== "isKnowledge") {
-      clearInterval(this.data.stimer);
+    if (this.isKnowledge !== "isKnowledge") {
+      clearInterval(this.stimer);
       this.clearTimer();
       this.clearForTimer();
-      if (!this.data.submited) {
+      if (!this.submited) {
         console.log("页面卸载时保存");
         this.saveAns();
       }
@@ -188,50 +189,36 @@ export default {
   },
   methods: {
     init: function () {
-      this.setData({
-        minutes: "00",
-        second: "00",
-      });
+      this.minutes = "00";
+      this.second = "00";
     },
     // 清除倒计时的计时器
     clearTimer: function () {
-      clearInterval(this.data.timer);
-      this.setData({
-        timer: null,
-      });
+      clearInterval(this.timer);
+      this.time = null;
       this.init();
     },
     // 清除正向计时器
     clearForTimer: function () {
-      clearInterval(this.data.forwardtimer);
-      this.setData({
-        forwardtimer: null,
-      });
+      clearInterval(this.forwardtimer);
+      this.forwardtimer = null;
       this.init();
     },
     forwardCount() {
       var forwardtimer = setInterval(() => {
-        var forwardtime = this.data.examSectionTemp.timeSecond + 1;
-        this.setData({
-          ["examSectionTemp.timeSecond"]: forwardtime,
-          ["examSectionTemp.timeWay"]: 1,
-        });
+        var forwardtime = this.examSectionTemp.timeSecond + 1;
+        this.examSectionTemp.timeSecond = forwardtime;
+        this.examSectionTemp.timeWay = 1;
         var str = this.conversion(forwardtime).split(":");
-        this.setData({
-          minutes: str[0],
-          seconds: str[1],
-        });
-        if (this.data.isSubmit) {
-          this.setData({
-            isSubmit: false,
-            submited: true,
-          });
+        this.minutes = str[0];
+        this.seconds = str[1];
+        if (this.isSubmit) {
+          this.isSubmit = false;
+          this.submited = true;
           this.spendAllTime();
         }
       }, 1000);
-      this.setData({
-        forwardtimer,
-      });
+      this.forwardtimer = forwardtimer;
     },
     countDown: function (duration) {
       if (duration <= 0) {
@@ -255,82 +242,60 @@ export default {
       console.log(`总时间为${initDuration}`);
       var timer = setInterval(() => {
         var totalseconds = initDuration;
-        var lasttime = this.data.lasttime + 1;
+        var lasttime = this.lasttime + 1;
         totalseconds = totalseconds - lasttime;
-        this.setData({
-          lasttime,
-          ["examSectionTemp.timeSecond"]: totalseconds,
-        });
+        this.lasttime = lasttime;
+        this.examSectionTemp.timeSecond = totalseconds;
         var str = this.countDown(totalseconds).split(":");
-        this.setData({
-          minutes: str[0],
-          seconds: str[1],
-        });
+        this.minutes = str[0];
+        this.seconds = str[1];
         // 判断是否提交，如果提交计算做题花费总时间
-        if (this.data.isSubmit) {
-          this.setData({
-            isSubmit: false,
-            submited: true,
-          });
+        if (this.isSubmit) {
+          this.isSubmit = false;
+          this.submited = true;
           this.spendAllTime();
         }
       }, 1000);
-      this.setData({
-        timer,
-      });
+      this.timer = timer;
     },
     saveAns() {
       let sign = "save";
-      console.log(`倒计时时间${this.data.examSectionTemp.timeSecond}`);
-      this.setData({
-        ["examSectionTemp.dealType"]: 1,
-      });
+      console.log(`倒计时时间${this.examSectionTemp.timeSecond}`);
+      this.examSectionTemp.dealType = 1;
       this.subOrSaveReq(sign);
     },
     autoSave() {
       let stimer = setInterval(() => {
         this.saveAns();
-      }, this.data.intervalTime);
-      this.setData({
-        stimer,
-      });
+      }, this.intervalTime);
+      this.stimer = stimer;
     },
     // 显示答题卡
     showAnswerCard() {
-      this.setData({
-        isShowAnswerCard: true,
-      });
+      this.isShowAnswerCard = true;
     },
     // 点击答题卡中的按钮进行跳转
     rediretTopic(e) {
       let currentTopicIndex = e.detail.currentIndex;
-      this.setData({
-        currentTopicIndex,
-        isShowAnswerCard: false,
-      });
+      this.currentTopicIndex = currentTopicIndex;
+      this.isShowAnswerCard = false;
     },
     // 隐藏答题卡
     hideAnswerCard() {
-      this.setData({
-        isShowAnswerCard: false,
-      });
+      this.isShowAnswerCard = false;
     },
     getDoneQue() {
       let doneArr = [];
-      let quesArr = this.data.tempSaveAns;
+      let quesArr = this.tempSaveAns;
       for (let i = 0; i < quesArr.length; ++i) {
         if (quesArr[i].userAnswer !== 0) {
           doneArr.push(quesArr[i]);
         }
       }
-      if (this.data.type === "isKnowledge") {
-        this.setData({
-          ["examKnowledgeTemp.examItemTempList"]: doneArr,
-        });
+      if (this.type === "isKnowledge") {
+        this.examKnowledgeTemp.examItemTempList = doneArr;
       } else {
-        this.setData({
-          ["examSectionTemp.examItemTempList"]: doneArr,
-        });
+        this.examSectionTemp.examItemTempList = doneArr;
       }
     },
     subOrSaveReq(sign = "submit") {
@@ -349,16 +314,16 @@ export default {
         }
         let url = "";
         let data = {};
-        console.log(`type的值是${this.data.type}`);
+        console.log(`type的值是${this.type}`);
         this.getDoneQue();
 
-        if (this.data.type === "isKnowledge") {
+        if (this.type === "isKnowledge") {
           url =
             "https://www.shenfu.online/sfeduTaro/api/exam/dealKnowledgeExam";
-          data = this.data.examKnowledgeTemp;
+          data = this.examKnowledgeTemp;
         } else {
           url = "https://www.shenfu.online/sfeduTaro/api/exam/dealSectionExam";
-          data = this.data.examSectionTemp;
+          data = this.examSectionTemp;
         }
         console.log(data);
         Taro.request({
@@ -369,15 +334,13 @@ export default {
           success: (res) => {
             console.log(res);
             if (sign === "submit") {
-              if (this.data.type === "isKnowledge") {
+              if (this.type === "isKnowledge") {
                 Taro.hideLoading();
-                this.setData({
-                  type: "",
-                });
+                this.type = "";
                 let pages = getCurrentPages();
                 let prevPage = pages[pages.length - 2];
                 prevPage.setData({
-                  examId: this.data.examId,
+                  examId: this.examId,
                 });
                 prevPage.getList(prevPage.data.examId);
                 Taro.navigateBack({
@@ -404,20 +367,18 @@ export default {
       });
     },
     spendAllTime() {
-      if (this.data.type === "isKnowledge") {
-        // console.log(`${this.data.examKnowledgeTemp.timeWay}计时,倒计时总时间为${this.data.examKnowledgeTemp.timeSecond}s`)
+      if (this.type === "isKnowledge") {
+        // console.log(`${this.examKnowledgeTemp.timeWay}计时,倒计时总时间为${this.examKnowledgeTemp.timeSecond}s`)
         // this.setData({
         //   ['examKnowledgeTemp.dealType']: 2
         // })
-        // console.log(this.data.examKnowledgeTemp)
+        // console.log(this.examKnowledgeTemp)
       } else {
         console.log(
-          `${this.data.examSectionTemp.timeWay}计时,倒计时总时间为${this.data.examSectionTemp.timeSecond}s`
+          `${this.examSectionTemp.timeWay}计时,倒计时总时间为${this.examSectionTemp.timeSecond}s`
         );
-        this.setData({
-          ["examSectionTemp.dealType"]: 2,
-        });
-        console.log(this.data.examSectionTemp);
+        this.examSectionTemp.dealType = 2;
+        console.log(this.examSectionTemp);
       }
       this.subOrSaveReq();
     },
@@ -425,20 +386,16 @@ export default {
     getUserAnswer(e) {
       console.log(e);
       // this.isMakeAllTopic()
-      let userAnswers = this.data.userAnswers;
+      let userAnswers = this.userAnswers;
       let choosedTopicIndex = e.target.dataset.index;
-      this.setData({
-        choosedTopicIndex,
-      });
-      let currentTopicIndex = this.data.currentTopicIndex;
+      this.choosedTopicIndex = choosedTopicIndex;
+      let currentTopicIndex = this.currentTopicIndex;
       let submitAnswer = [];
-      submitAnswer = this.data.tempSaveAns;
+      submitAnswer = this.tempSaveAns;
       submitAnswer[currentTopicIndex].userAnswer = choosedTopicIndex + 1;
-      this.setData({
-        tempSaveAns: submitAnswer,
-      });
+      this.tempSaveAns = submitAnswer;
       userAnswers[currentTopicIndex] = choosedTopicIndex;
-      if (currentTopicIndex < this.data.topicsLength - 1) {
+      if (currentTopicIndex < this.topicsLength - 1) {
         currentTopicIndex = currentTopicIndex + 1;
       } else {
         setTimeout(() => {
@@ -446,58 +403,44 @@ export default {
         }, 300);
       }
       setTimeout(() => {
-        this.setData({
-          userAnswers,
-          currentTopicIndex,
-        });
+        this.userAnswers = userAnswers;
+        this.currentTopicIndex = currentTopicIndex;
       }, 300);
     },
     isSubmit() {
-      this.setData({
-        isSubmit: true,
-      });
+      this.isSubmit = true;
     },
     // 提交答案
     submitUserAnswer() {
-      this.setData({
-        isShowAnswerCard: true,
-      });
+      this.isShowAnswerCard = true;
     },
     // 滑动至下一题或上一题
     nextTopic(e) {
-      let userAnswers = this.data.userAnswers;
+      let userAnswers = this.userAnswers;
       let currentTopicIndex = e.detail.current;
       if (userAnswers.length !== 0) {
         let choosedTopicIndex = userAnswers[currentTopicIndex];
-        this.setData({
-          choosedTopicIndex,
-        });
+        this.choosedTopicIndex = choosedTopicIndex;
       }
       this.isShowSubmit(currentTopicIndex);
     },
     // 判断是否显示提交按钮
     isShowSubmit(value) {
       let currentTopicIndex = value;
-      let len = this.data.topicsLength;
+      let len = this.topicsLength;
       let lastTopicIndex = len - 1;
-      let count = this.data.count.size;
+      let count = this.count.size;
       if (currentTopicIndex === lastTopicIndex || count === len) {
-        this.setData({
-          isLastTopic: true,
-        });
+        this.isLastTopic = true;
       } else {
-        this.setData({
-          isLastTopic: false,
-        });
+        this.isLastTopic = false;
       }
-      this.setData({
-        currentTopicIndex,
-      });
+      this.currentTopicIndex = currentTopicIndex;
     },
 
     // 得到题目集合
     getTopicsList(examId, knowledgePointId) {
-      if (this.data.type === "isKnowledge") {
+      if (this.type === "isKnowledge") {
         request(
           "api/exam/getKnowledgeExamOfUser",
           "get",
@@ -524,24 +467,18 @@ export default {
                 arr[i] = questionList[i].userAnswer - 1;
               }
             }
-            this.setData({
-              userAnswers: arr,
-              topicsList: questionList,
-              topicsLength: questionList.length,
-              tempSaveAns: tempArr,
-              examKnowledgeTemp: {
-                examId: examId,
-                examItemTempList: tempArr,
-              },
-            });
+            this.userAnswers = arr;
+            this.topicsList = questionList;
+            this.topicsLength = questionList.length;
+            this.tempSaveAns = tempArr;
+            this.examKnowledgeTemp.examId = examId;
+            this.examKnowledgeTemp.examItemTempList = tempArr;
             console.log(arr);
-            console.log(this.data.examKnowledgeTemp.examItemTempList);
+            console.log(this.examKnowledgeTemp.examItemTempList);
 
             if (arr[0] !== -1) {
               let choosedTopicIndex = arr[0];
-              this.setData({
-                choosedTopicIndex,
-              });
+              this.choosedTopicIndex = choosedTopicIndex;
             }
             this.forwardCount();
           },
@@ -557,16 +494,14 @@ export default {
           (res) => {
             console.log(res.data);
             if (res.data.questionList) {
-              this.setData({
-                topicsList: res.data.questionList,
-                topicsLength: res.data.questionList.length,
-                ["examSectionTemp.examId"]: res.data.examId,
-                ["examSectionTemp.timeSecond"]: res.data.timeSecond,
-                ["examSectionTemp.timeWay"]: res.data.timeWay,
-              });
+              this.topicsList = res.data.questionList;
+              this.topicsLength = res.data.questionList.length;
+              this.examSectionTemp.examId = res.data.examId;
+              this.examSectionTemp.timeSecond = res.data.timeSecond;
+              this.examSectionTemp.timeWay = res.data.timeWay;
 
-              let len = this.data.topicsLength;
-              let list = this.data.topicsList;
+              let len = this.topicsLength;
+              let list = this.topicsList;
               let arr = new Array(len).fill(-1);
               let tempArr = [];
               for (let i = 0; i < len; ++i) {
@@ -581,20 +516,16 @@ export default {
                 }
                 tempArr.push(obj);
               }
-              this.setData({
-                userAnswers: arr,
-                tempSaveAns: tempArr,
-              });
+              this.userAnswers = arr;
+              this.tempSaveAns = tempArr;
               console.log(arr);
-              console.log(this.data.examSectionTemp.examItemTempList);
+              console.log(this.examSectionTemp.examItemTempList);
               if (arr[0] !== -1) {
                 let choosedTopicIndex = arr[0];
-                this.setData({
-                  choosedTopicIndex,
-                });
+                this.choosedTopicIndex = choosedTopicIndex;
               }
-              if (this.data.examSectionTemp.timeWay === 0) {
-                this.runCountDown(this.data.examSectionTemp.timeSecond);
+              if (this.examSectionTemp.timeWay === 0) {
+                this.runCountDown(this.examSectionTemp.timeSecond);
               } else {
                 this.forwardCount();
               }
@@ -615,7 +546,7 @@ export default {
 
 <style lang="less">
 .clock-list {
-  width: 682rpx;
+  width: 682px;
   height: 100%;
   margin: 0 auto;
   display: flex;
@@ -623,23 +554,23 @@ export default {
   justify-content: space-between;
   align-items: center;
   color: rgb(254, 254, 254);
-  font-size: 30rpx;
+  font-size: 30px;
 }
 .clock-wrap {
   width: 100%;
-  height: 84rpx;
+  height: 84px;
   background-color: #15da7f;
 }
 
 .clock-list button {
-  border-radius: 4rpx;
-  padding: 0rpx;
-  margin: 0rpx;
+  border-radius: 4px;
+  padding: 0px;
+  margin: 0px;
   display: inline-block;
-  line-height: 44rpx;
-  width: 96rpx;
+  line-height: 44px;
+  width: 96px;
   text-align: center;
-  border: 1rpx solid #ccc;
+  border: 1px solid #ccc;
 }
 
 .clock-list button::after {
@@ -661,13 +592,13 @@ export default {
 }
 
 .answer-card {
-  line-height: 44rpx;
+  line-height: 44px;
   text-align: center;
 }
 
 .topic-wrap {
   width: 100%;
-  height: 1334rpx;
+  height: 1334px;
   background-color: #f2f6f7;
 }
 
@@ -683,41 +614,41 @@ export default {
 }
 
 .topic-img {
-  height: 854rpx;
+  height: 854px;
   background-color: #fff;
   box-sizing: border-box;
-  padding: 20rpx;
+  padding: 20px;
 }
 .topic-img image {
-  max-height: 834rpx;
+  max-height: 834px;
 }
 .btn-wrap {
-  width: 640rpx;
-  height: 120rpx;
+  width: 640px;
+  height: 120px;
   display: flex;
-  margin: 50rpx auto 0;
+  margin: 50px auto 0;
   justify-content: space-between;
   align-items: center;
 }
 
 .btn-item {
-  width: 118rpx;
-  line-height: 118rpx;
+  width: 118px;
+  line-height: 118px;
   text-align: center;
   border-radius: 50%;
-  border: 1rpx solid #ccc;
+  border: 1px solid #ccc;
 }
 
 .submit {
-  width: 588rpx;
-  line-height: 80rpx;
+  width: 588px;
+  line-height: 80px;
   text-align: center;
   position: fixed;
-  bottom: 52rpx;
+  bottom: 52px;
   left: 50%;
   transform: translate(-50%);
-  border-radius: 40rpx;
-  font-size: 36rpx;
+  border-radius: 40px;
+  font-size: 36px;
   font-family: "Adobe Heiti Std R";
 }
 
@@ -729,60 +660,60 @@ export default {
   top: 0;
 }
 .img {
-  width: 34rpx;
+  width: 34px;
 }
 .item-one {
-  width: 120rpx;
-  line-height: 34rpx;
+  width: 120px;
+  line-height: 34px;
   display: flex;
   justify-content: flex-start;
 }
 .item-text {
-  width: 57rpx;
-  line-height: 34rpx;
-  margin-left: 8rpx;
+  width: 57px;
+  line-height: 34px;
+  margin-left: 8px;
 }
 
 .quetype {
   width: 100%;
-  height: 80rpx;
+  height: 80px;
   color: #fff;
-  font-size: 30rpx;
+  font-size: 30px;
   background-color: #2b2b2b;
 }
 .quetype-con {
-  width: 670rpx;
-  line-height: 80rpx;
+  width: 670px;
+  line-height: 80px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
 }
 .quetype-con .item image {
   vertical-align: middle;
-  width: 12rpx;
-  height: 12rpx;
+  width: 12px;
+  height: 12px;
   display: inline-block;
-  padding: 0 12rpx;
+  padding: 0 12px;
 }
 
 .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 80rpx;
+  height: 80px;
   background-color: #2b2b2b;
 }
 .tip-b {
   color: #fff;
-  font-size: 20rpx;
+  font-size: 20px;
   text-align: center;
-  margin: 19rpx auto 0;
+  margin: 19px auto 0;
 }
 .tip-s {
   color: rgb(65, 77, 97);
-  font-size: 16rpx;
+  font-size: 16px;
   text-align: center;
-  margin: 4rpx auto 8rpx;
+  margin: 4px auto 8px;
 }
 
 .hide {

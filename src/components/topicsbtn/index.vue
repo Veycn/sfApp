@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+import Taro from '@tarojs/taro';
 export default {
   props: {
     scantronList: Array,
@@ -23,16 +24,16 @@ export default {
   methods: {
     rediretTopic(e) {
       let currentIndex = e.currentTarget.dataset.index;
-      this.triggerEvent("rediretTopic", { currentIndex });
+      Taro.eventCenter.trigger("rediretTopic", { currentIndex });
     },
     onClose() {
       setTimeout(() => {
-        this.triggerEvent("hideAnswerCard");
+        Taro.eventCenter.trigger("hideAnswerCard");
       }, 300);
     },
     // 提交并查看结果
     watchResult() {
-      this.triggerEvent("isSubmit");
+      Taro.eventCenter.trigger("isSubmit");
     },
   },
 };
@@ -41,20 +42,20 @@ export default {
 <style lang="less">
 .container {
   width: 100%;
-  height: 490rpx;
+  height: 490px;
   box-sizing: border-box;
-  padding: 0 50rpx;
-  margin-top: 39rpx;
+  padding: 0 50px;
+  margin-top: 39px;
 }
 .container .default {
   display: inline-block;
-  width: 104rpx;
+  width: 104px;
   text-align: center;
   border-radius: 50%;
-  font-size: 30rpx;
-  line-height: 104rpx;
-  margin-left: 67rpx;
-  margin-bottom: 46rpx;
+  font-size: 30px;
+  line-height: 104px;
+  margin-left: 67px;
+  margin-bottom: 46px;
   font-family: "Adobe Heiti Std R";
   border: 1px solid rgba(230, 230, 230, 1);
 }
@@ -71,13 +72,13 @@ export default {
   color: #ffffff;
 }
 .tip {
-  width: 400rpx;
-  line-height: 60rpx;
+  width: 400px;
+  line-height: 60px;
   background-color: rgb(21, 236, 137);
-  border-radius: 30rpx;
-  margin: 60rpx auto 30rpx;
+  border-radius: 30px;
+  margin: 60px auto 30px;
   text-align: center;
   color: #fff;
-  font-size: 30rpx;
+  font-size: 30px;
 }
 </style>

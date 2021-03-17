@@ -29,26 +29,26 @@ export default {};
 }
 .decorate {
   position: absolute;
-  left: 204rpx;
+  left: 204px;
   width: 100%;
 }
 .decorate > .item {
-  width: 18rpx;
-  height: 18rpx;
+  width: 18px;
+  height: 18px;
   background: #ccc;
   border-radius: 50%;
-  margin-bottom: 60rpx;
+  margin-bottom: 60px;
   position: relative;
 }
 
 .decorate > .item::after {
   content: "";
   display: block;
-  width: 2rpx;
-  height: 78rpx;
+  width: 2px;
+  height: 78px;
   background: #ccc;
   position: absolute;
-  left: 9rpx;
+  left: 9px;
 }
 
 .decorate > .item:last-child::after {
@@ -57,15 +57,15 @@ export default {};
 
 .text {
   position: absolute;
-  left: 250rpx;
+  left: 250px;
 }
 
 .text .title {
-  margin-bottom: 46rpx;
-  font-size: 30rpx;
+  margin-bottom: 46px;
+  font-size: 30px;
   font-weight: bold;
-  height: 30rpx;
-  line-height: 30rpx;
+  height: 30px;
+  line-height: 30px;
 }
 
 .text > .title > .data {

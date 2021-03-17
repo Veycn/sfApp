@@ -9,7 +9,7 @@
       </scroll-view>
     </view>
     <view class="scroll">
-      <scroll-view class="test-papers" style="width: 586rpx" scroll-x="true">
+      <scroll-view class="test-papers" style="width: 586px" scroll-x="true">
         <block
           v-for="(item, index) in seclist.exams"
           v-for-item="exams"
@@ -58,52 +58,52 @@
 
 <style lang="less">
 .sec-wrap {
-  width: 706rpx;
-  height: 200rpx;
-  margin: 3rpx auto 0;
-  border-radius: 10rpx;
+  width: 706px;
+  height: 200px;
+  margin: 3px auto 0;
+  border-radius: 10px;
   background-color: #fff;
   position: relative;
 }
 .sec-chapter {
   position: absolute;
-  height: 40rpx;
+  height: 40px;
   width: 100%;
-  top: 24rpx;
+  top: 24px;
   left: 0;
   display: flex;
   align-items: center;
 }
 .sec-top {
-  width: 84rpx;
-  height: 40rpx;
-  line-height: 40rpx;
+  width: 84px;
+  height: 40px;
+  line-height: 40px;
   background-color: rgb(24, 219, 155);
-  border-radius: 6rpx;
+  border-radius: 6px;
   color: #fff;
-  font-size: 20rpx;
+  font-size: 20px;
   font-family: "PingFang-SC-Regular";
   text-align: center;
 }
 .scroll-view {
   white-space: nowrap;
-  width: 580rpx;
+  width: 580px;
   overflow: auto;
 }
 .sec-name {
   display: inline-block;
-  margin-left: 30rpx;
-  font-size: 38rpx;
+  margin-left: 30px;
+  font-size: 38px;
 }
 .sec-ratio {
   display: inline-block;
-  margin-left: 30rpx;
-  font-size: 20rpx;
+  margin-left: 30px;
+  font-size: 20px;
 }
 .scroll {
   position: absolute;
-  bottom: 36rpx;
-  left: 62rpx;
+  bottom: 36px;
+  left: 62px;
 }
 ::-webkit-scrollbar {
   width: 0;
@@ -111,20 +111,20 @@
   color: transparent;
 }
 .test-papers {
-  width: 586rpx;
-  height: 74rpx;
+  width: 586px;
+  height: 74px;
   white-space: nowrap;
 }
 .test-item {
-  width: 65rpx;
-  height: 73rpx;
+  width: 65px;
+  height: 73px;
   position: relative;
   display: inline-block;
 }
 .test-item-nofirst {
-  width: 65rpx;
-  height: 73rpx;
-  margin-left: 99rpx;
+  width: 65px;
+  height: 73px;
+  margin-left: 99px;
   position: relative;
   display: inline-block;
 }
@@ -133,25 +133,25 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 65rpx;
-  height: 73rpx;
+  width: 65px;
+  height: 73px;
 }
 .test-papers .paper-name {
   position: absolute;
-  top: 9rpx;
-  left: 2rpx;
-  font-size: 24rpx;
-  height: 73rpx;
-  width: 32rpx;
+  top: 9px;
+  left: 2px;
+  font-size: 24px;
+  height: 73px;
+  width: 32px;
   color: #fff;
   white-space: pre-wrap;
 }
 .nopaper-name {
   position: absolute;
-  font-size: 24rpx;
-  height: 73rpx;
-  line-height: 73rpx;
-  width: 60rpx;
+  font-size: 24px;
+  height: 73px;
+  line-height: 73px;
+  width: 60px;
   text-align: center;
 }
 </style>

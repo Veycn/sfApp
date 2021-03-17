@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import Taro from '@tarojs/taro';
 export default {
   props: {
     tagName: String,
@@ -40,10 +41,8 @@ export default {
   methods: {
     itemChoosed(e) {
       let { item, index } = e.currentTarget.dataset;
-      this.setData({
-        activeIndex: index,
-      });
-      this.triggerEvent("tagBeChoosed", { item, index });
+      this.activeIndex = index;
+      Taro.eventCenter.trigger("tagBeChoosed", { item, index });
     },
     showTip() {
       Taro.showToast({
@@ -57,31 +56,31 @@ export default {
 
 <style lang="less">
 .wrapper {
-  width: 700rpx;
-  min-height: 270rpx;
+  width: 700px;
+  min-height: 270px;
   background: #fff;
-  border-radius: 10rpx;
+  border-radius: 10px;
   margin: 0 auto;
-  margin-bottom: 25rpx;
+  margin-bottom: 25px;
   position: relative;
   box-sizing: border-box;
-  padding: 32rpx 0rpx 0;
+  padding: 32px 0px 0;
   border: 1px;
 }
 
 .wrapper .tag {
-  width: 84rpx;
-  height: 40rpx;
+  width: 84px;
+  height: 40px;
   background: royalblue;
   position: absolute;
-  left: -10rpx;
-  top: 45rpx;
+  left: -10px;
+  top: 45px;
 }
 .wrapper .title {
-  padding-left: 120rpx;
+  padding-left: 120px;
 }
 .wrapper .title .text {
-  font-size: 48rpx;
+  font-size: 48px;
   font-weight: bold;
   color: rgba(28, 27, 27, 1);
 }
@@ -90,7 +89,7 @@ export default {
   width: 100%;
   height: auto;
   box-sizing: border-box;
-  padding: 20rpx 50rpx;
+  padding: 20px 50px;
   display: flex;
   white-space: normal;
   flex-wrap: wrap;
@@ -98,16 +97,16 @@ export default {
 
 .content .item {
   display: inline-block;
-  min-width: 132rpx;
-  height: 60rpx;
+  min-width: 132px;
+  height: 60px;
   background: #ccc;
   text-align: center;
   box-sizing: border-box;
-  font-size: 21rpx;
-  line-height: 60rpx;
-  margin: 0 20rpx 25rpx 20rpx;
-  border-radius: 4rpx;
-  padding: 0 10rpx;
+  font-size: 21px;
+  line-height: 60px;
+  margin: 0 20px 25px 20px;
+  border-radius: 4px;
+  padding: 0 10px;
   color: #fff;
 }
 </style>

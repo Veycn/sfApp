@@ -40,7 +40,7 @@ export default {
   },
   onLoad: function (options) {
     console.log(options.data);
-    let arr = this.data.resultArr;
+    let arr = this.resultArr;
     let { ratio, rightNum, useTime, submitNum } = JSON.parse(options.data);
 
     arr.push(`${submitNum}题`);
@@ -49,9 +49,7 @@ export default {
     let m = Math.floor(useTime / 60);
     let s = useTime % 60;
     arr.push(`${m}分${s}秒`);
-    this.setData({
-      resultArr: arr,
-    });
+    this.resultArr = arr;
     console.log(arr);
   },
 
@@ -82,18 +80,18 @@ page {
 }
 
 .swiper {
-  height: 296rpx;
+  height: 296px;
   width: 100%;
 }
 .swiper-item {
-  height: 296rpx;
+  height: 296px;
   width: 100%;
-  line-height: 296rpx;
+  line-height: 296px;
   text-align: center;
 }
 .banner {
   width: 100%;
-  height: 294rpx;
+  height: 294px;
 }
 
 .banner > .ba {
@@ -107,51 +105,51 @@ page {
 
 .header .chapter {
   box-sizing: border-box;
-  padding: 40rpx 78rpx 10rpx;
+  padding: 40px 78px 10px;
   position: relative;
   background-image: url("https://www.shenfu.online/pic/Image.png");
   background-repeat: no-repeat;
-  background-size: 120rpx 74rpx;
-  background-position: 38rpx 40rpx;
+  background-size: 120px 74px;
+  background-position: 38px 40px;
 }
 
 .header .chapter .img {
-  width: 120rpx;
-  height: 74rpx;
+  width: 120px;
+  height: 74px;
   vertical-align: middle;
   position: absolute;
-  left: 40rpx;
+  left: 40px;
   z-index: -1;
 }
 
 .lbt {
   width: 100%;
-  height: 296rpx;
+  height: 296px;
 }
 
 .header .chapter .txt {
   font-weight: bold;
-  font-size: 48rpx;
-  padding-bottom: 20rpx;
+  font-size: 48px;
+  padding-bottom: 20px;
 }
 
 .header .chapter .txt .down {
-  width: 31rpx;
-  height: 31rpx;
-  margin-left: 17rpx;
+  width: 31px;
+  height: 31px;
+  margin-left: 17px;
 }
 
 .header .chapter .tip {
-  font-size: 24rpx;
+  font-size: 24px;
   color: #1c1b1b;
 }
 .scroll {
-  width: 588rpx;
+  width: 588px;
   margin: auto;
 }
 .scroll .scroller {
   width: 100%;
-  height: 100rpx;
+  height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -163,11 +161,11 @@ page {
   display: inline-block;
   height: 100%;
   text-align: center;
-  margin-right: 90rpx;
-  font-size: 30rpx;
+  margin-right: 90px;
+  font-size: 30px;
   font-weight: bold;
   box-sizing: border-box;
-  padding-top: 24rpx;
+  padding-top: 24px;
   border-bottom: 1px solid transparent;
 }
 
@@ -177,15 +175,15 @@ page {
 }
 
 .p-container .section-list {
-  width: 710rpx;
-  margin: 20rpx auto;
+  width: 710px;
+  margin: 20px auto;
   background-color: rgb(240, 242, 245);
-  padding-bottom: 20rpx;
+  padding-bottom: 20px;
 }
 
 .p-container .section-list .sec-wraps {
-  width: 705rpx;
-  margin: 0 auto 15rpx;
+  width: 705px;
+  margin: 0 auto 15px;
 }
 
 .slide-image {

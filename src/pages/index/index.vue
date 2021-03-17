@@ -34,14 +34,11 @@
 
 <script>
 import Tag from "../../components/tag/index.vue";
-import AllGrades from "../../components/allgrades/index.vue";
-import AllSubjects from "../../components/allsubjects/index.vue";
-import AllVersion from "../../components/allversion/index.vue";
 import ChooseBoard from "../../components/chooseBoard/index.vue";
 import TipWindows from "../../components/tipWindows/index.vue";
 import Taro from "@tarojs/taro";
-const { request } = require("../../utils/request.js");
-    
+import request from "../../utils/http";
+
 export default {
   name: "Index",
   data() {
@@ -69,13 +66,15 @@ export default {
   },
   onLoad: function (options) {
     this.getAllGrades();
+    Taro.eventCenter.on("exitModal", this.exitModal);
   },
   methods: {
     startStudy() {
-      console.log('startStudy', this.isStartStudy);
+      console.log("startStudy", this.isStartStudy);
       console.log(this.data);
       if (this.isStartStudy) {
-        const choosedTitle = this.choosedSubject + this.choosedBook + this.choosedVersion;
+        const choosedTitle =
+          this.choosedSubject + this.choosedBook + this.choosedVersion;
         console.log(`选中的信息是:`);
         console.log(choosedTitle);
         app.globalData.requestMsg = this.getversion;
@@ -83,29 +82,42 @@ export default {
           key: "choosedTitle",
           data: choosedTitle,
         });
-        request(
-          "api/userInfo/addUserInfo",
-          "post",
-          this.getversion,
-          (res) => {
-            console.log(res);
-          },
-          "form"
-        );
+        request.post({
+          url: "api/userInfo/addUserInfo",
+          params: this.getversion
+        }).then(res => {
+          console.log(res);
+        })
+        // request(
+        //   "api/userInfo/addUserInfo",
+        //   "post",
+        //   this.getversion,
+        //   (res) => {
+        //     console.log(res);
+        //   },
+        //   "form"
+        // );
         Taro.switchTab({ url: `../detect/index` });
       } else {
         this.isChoosed = true;
       }
     },
     exitModal() {
+      console.log("exitModal");
       this.isChoosed = false;
     },
 
     getAllGrades() {
-      request("api/userInfo/getSubjectList", "get", {}, (res) => {
-        console.log('getAllGrades', res);
-        this.allGrades = res.data;
-      });
+      console.log("getAllGrades");
+      request
+        .get({
+          url: "api/userInfo/getSubjectList",
+          params: {},
+        })
+        .then((res) => {
+          console.log("getAllGrades", res);
+          this.allGrades = res.data;
+        });
     },
     getSubjects(id) {
       request(
@@ -142,7 +154,7 @@ export default {
         province,
         country,
         avatarUrl,
-      } = this.data.userInfo;
+      } = this.userInfo;
       request(
         "api/userAccount/login",
         "post",
@@ -165,42 +177,31 @@ export default {
 
     gradeChoosed(e) {
       console.log(e.detail.item.subject);
-      this.setData({
-        choosedSubject: e.detail.item.subject,
-      });
+      this.choosedSubject = e.detail.item.subject;
       const id = e.detail.item.id;
-      this.setData({ ["getversion.subjectId"]: id });
+      this.getversion.subjectId = id;
       this.getSubjects(id);
     },
     subjectChoosed(e) {
       console.log(e.detail.item.textbook);
-      this.setData({
-        choosedBook: e.detail.item.textbook,
-      });
+      this.choosedBook = e.detail.item.textbook;
       const id = e.detail.item.id;
-      this.setData({ ["getversion.textbookId"]: id });
+      this.getversion.textbookId = id;
       this.getTextBooks(id);
     },
 
     versionChoosed(e) {
       console.log(e.detail.item.textbookVersion);
-      this.setData({
-        choosedVersion: e.detail.item.textbookVersion,
-      });
+      this.choosedVersion = e.detail.item.textbookVersion;
       const id = e.detail.item.id;
-      this.setData({
-        ["getversion.textbookVersionId"]: id,
-        isStartStudy: true,
-      });
+      this.getversion.textbookVersionId = id;
+      this.isStartStudy = true;
     },
   },
   components: {
     Tag,
-    AllGrades,
-    AllSubjects,
-    AllVersion,
     ChooseBoard,
-    TipWindows
+    TipWindows,
   },
 };
 </script>
@@ -210,16 +211,16 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(240, 242, 245, 1);
-  padding-top: 40rpx;
+  padding-top: 40px;
 }
 .scroll-wrap {
   height: 100%;
 }
 .to-learn {
-  margin-top: 25rpx;
-  margin-bottom: 50rpx;
-  width: 416rpx;
-  height: 154rpx;
+  margin-top: 25px;
+  margin-bottom: 50px;
+  width: 416px;
+  height: 154px;
   background: transparent;
   position: absolute;
   left: 50%;
