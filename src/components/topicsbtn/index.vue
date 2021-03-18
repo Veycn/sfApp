@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y="true" class="container">
+  <scroll-view scroll-y="true" class="btn-container">
     <block v-for="(item, index) in scantronList" :key="index">
       <view
         @tap="rediretTopic"
@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     rediretTopic(e) {
-      let currentIndex = e.currentTarget.dataset.index;
+      let currentIndex = e.target.dataset.index;
       Taro.eventCenter.trigger("rediretTopic", { currentIndex });
     },
     onClose() {
@@ -40,14 +40,16 @@ export default {
 </script>
 
 <style lang="less">
-.container {
+.btn-container {
   width: 100%;
   height: 490px;
   box-sizing: border-box;
-  padding: 0 50px;
   margin-top: 39px;
+  display: grid;
+  justify-content: space-between;
+  grid-auto-columns: repeat(4, 104px);
 }
-.container .default {
+.btn-container .default {
   display: inline-block;
   width: 104px;
   text-align: center;
@@ -58,9 +60,6 @@ export default {
   margin-bottom: 46px;
   font-family: "Adobe Heiti Std R";
   border: 1px solid rgba(230, 230, 230, 1);
-}
-.container .default:nth-child(4n + 1) {
-  margin-left: 0;
 }
 .init {
   background-color: #ffffff;

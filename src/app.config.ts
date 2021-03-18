@@ -9,6 +9,7 @@ export default {
     "pages/detectResult/index",
     "pages/tLogin/index",
     "pages/income/index",
+    "pages/points/index",
   ],
   window: {
     backgroundTextStyle: "light",
@@ -25,7 +26,7 @@ export default {
         selectedIconPath: "assets/icon/b_active.png"
       },
       {
-        pagePath: "pages/index/index",
+        pagePath: "pages/detect/index",
         text: "认知检测",
         iconPath: "assets/icon/a.png",
         selectedIconPath: "assets/icon/a_active.png"

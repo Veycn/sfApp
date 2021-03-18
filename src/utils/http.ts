@@ -30,6 +30,29 @@ const request = (url: string, params: object, method: Method=Method.GET, type?: 
   });
 };
 
+function getHeader (id=0) {
+  return new Promise((resolve, reject) => {
+    if(id === 1){
+      console.log(1);
+      
+      Taro.getStorage({
+        key: 'teacherToken',
+        success: result => {
+          resolve(result.data)
+        }
+      })
+    }else if(id === 0){
+      Taro.getStorage({
+        key: 'userToken',
+        success: result => {
+          console.log(result);
+          resolve(result.data)
+        }
+      })
+    }
+  })
+}
+
 const get = ({ url, params }) => {
   return request(url, params,Method.GET);
 };

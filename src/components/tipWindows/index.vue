@@ -1,6 +1,6 @@
 <template>
   <view class="t-container">
-    <view class="wrap">
+    <view class="t-wrap">
       <view class="tip-logo" @tap="exitModal"
         ><image mode="widthFix" src="../../assets/icon/exit2.png"></image
       ></view>
@@ -27,33 +27,35 @@ export default {
   background-color: rgba(30, 29, 29, 0.5);
   position: fixed;
   top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.t-container .wrap {
+.t-container .t-wrap {
   width: 500px;
   height: 254px;
   border-radius: 20px;
   overflow: hidden;
-  margin: 557px auto;
   background-color: #fff;
   position: relative;
 }
-.t-container .wrap .tip-logo {
+.t-container .t-wrap .tip-logo {
   width: 100%;
   height: 81px;
   background-color: #2b2b2b;
   position: relative;
 }
-.t-container .wrap .tip-logo image {
+.t-container .t-wrap .tip-logo image {
   width: 52px;
   position: absolute;
   top: 14px;
   right: 19px;
 }
-.t-container .wrap .tip-text {
+.t-container .t-wrap .tip-text {
   position: absolute;
   left: 33px;
   bottom: 109px;
   color: #ff0000;
-  font-size: 36px;
+  font-size: 32px;
 }
 </style>

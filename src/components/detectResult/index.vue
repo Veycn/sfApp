@@ -1,28 +1,32 @@
 <template>
-  <view class="c-wrapper">
-    <view class="content">
-      <view class="decorate">
-        <view
-          class="item"
-          v-for="(item, index) in pointNumber"
-          :key="index"
-        ></view>
-      </view>
-      <view class="text">
-        <view v-for="(item, index) in titleList" :key="index" class="title">
-          {{ item }} : <text class="data">{{ resultArr[index] }}</text>
-        </view>
+  <view class="result-content">
+    <view class="decorate">
+      <view
+        class="item"
+        v-for="(item, index) in pointNumber"
+        :key="index"
+      ></view>
+    </view>
+    <view class="result-text">
+      <view v-for="(item, index) in titleList" :key="index" class="res-title">
+        {{ item }} : <text class="data">{{ resultArr[index] }}</text>
       </view>
     </view>
   </view>
 </template>
 
 <script lang="ts">
-export default {};
+export default {
+  props: {
+    pointNumber: Number,
+    titleList: Array,
+    resultArr: Array,
+  },
+};
 </script>
 
 <style lang="less">
-.content {
+.result-content {
   position: relative;
   width: 100%;
   height: auto;
@@ -55,12 +59,12 @@ export default {};
   display: none;
 }
 
-.text {
+.result-text {
   position: absolute;
   left: 250px;
 }
 
-.text .title {
+.result-text .res-title {
   margin-bottom: 46px;
   font-size: 30px;
   font-weight: bold;
@@ -68,7 +72,7 @@ export default {};
   line-height: 30px;
 }
 
-.text > .title > .data {
+.result-text > .res-title > .data {
   color: #15da7f;
 }
 </style>

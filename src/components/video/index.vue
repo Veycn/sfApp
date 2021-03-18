@@ -65,9 +65,7 @@ export default {
   methods: {
     // 判断status
     toExam(e) {
-      console.log("exam", e);
       let { knowledgepointid, examid, submitstatus } = e.currentTarget.dataset;
-      console.log(knowledgepointid, examid, submitstatus);
       if (submitstatus === 0) {
         Taro.navigateTo({
           url: `/pages/exam/index?examId=${examid}`,

@@ -1,18 +1,13 @@
 <template>
   <view class="clock-container">
-    <view :class="[isShowExitModal ? 'show' : 'hide']">
-      <exit-modal @hideExitModal="hideExitModal" />
-    </view>
     <block v-if="isShowAnswerCard">
-      <answer-card @hideAnswerCard="hideAnswerCard" @isSubmit="isSubmit">
+      <answer-card @hideAnswerCard="hideAnswerCard" @isSubmit="isSubmited">
         <topics-btn
-          :submitAnswer="examTemp"
           slot="scantron"
           @rediretTopic="rediretTopic"
           @hideAnswerCard="hideAnswerCard"
           :isFinshed="userAnswers"
           :scantron-list="topicsList"
-          :spendTime="spendTime"
         />
       </answer-card>
     </block>
@@ -93,15 +88,18 @@
 </template>
 
 <script>
-const { request, getHeader } = require("../../utils/http.ts");
+import request from "../../utils/http";
 import Taro from "@tarojs/taro";
 const header = {
   "content-type": "application/json",
 };
 
-import ExitModal from "../../components/exitmodal/index.vue";
 import TopicsBtn from "../../components/topicsbtn/index.vue";
 import AnswerCard from "../../components/answercard/index.vue";
+
+import clock from "../../assets/icon/clock.png";
+import icon_circle from "../../assets/icon/icon_circle.png";
+import icon_poss from "../../assets/icon/icon_poss.png";
 
 export default {
   props: {
@@ -116,9 +114,9 @@ export default {
   },
   data() {
     return {
-      szimg: "../../assets/icon/clock.png",
-      tyimg: "../../assets/icon/icon_circle.png",
-      psimg: "../../assets/icon/icon_poss.png",
+      szimg: clock,
+      tyimg: icon_circle,
+      psimg: icon_poss,
       minutes: "00",
       seconds: "00",
       timer: null, // 倒计时 器
@@ -161,8 +159,8 @@ export default {
 
   onLoad: function (options) {
     Taro.eventCenter.on("hideAnswerCard", this.hideAnswerCard);
-    Taro.eventCenter.on("rediretTopic", this.hideAnswerCard);
-    Taro.eventCenter.on("isSubmit", this.hideAnswerCard);
+    Taro.eventCenter.on("rediretTopic", this.rediretTopic);
+    Taro.eventCenter.on("isSubmit", this.isSubmited);
     if (options.isKnowledge) {
       this.type = "isKnowledge";
       this.examId = options.examId;
@@ -276,13 +274,15 @@ export default {
     },
     // 点击答题卡中的按钮进行跳转
     rediretTopic(e) {
-      let currentTopicIndex = e.detail.currentIndex;
-      this.currentTopicIndex = currentTopicIndex;
+      this.currentTopicIndex = e.currentIndex;
       this.isShowAnswerCard = false;
     },
     // 隐藏答题卡
     hideAnswerCard() {
       this.isShowAnswerCard = false;
+    },
+    hideExitModal() {
+      console.log("hideExitModal");
     },
     getDoneQue() {
       let doneArr = [];
@@ -298,73 +298,52 @@ export default {
         this.examSectionTemp.examItemTempList = doneArr;
       }
     },
-    subOrSaveReq(sign = "submit") {
-      console.log("submit");
+    async subOrSaveReq(sign = "submit") {
       if (sign === "submit") {
         Taro.showLoading({
           title: "加载中...",
           icon: "none",
         });
       }
-      getHeader().then((token) => {
-        if (token) {
-          header.token = token;
-        } else {
-          console.error("token get faild!");
-        }
-        let url = "";
-        let data = {};
-        console.log(`type的值是${this.type}`);
-        this.getDoneQue();
+      let url = "";
+      let data = {};
+      this.getDoneQue();
 
-        if (this.type === "isKnowledge") {
-          url =
-            "https://www.shenfu.online/sfeduTaro/api/exam/dealKnowledgeExam";
-          data = this.examKnowledgeTemp;
-        } else {
-          url = "https://www.shenfu.online/sfeduTaro/api/exam/dealSectionExam";
-          data = this.examSectionTemp;
-        }
-        console.log(data);
-        Taro.request({
-          url: url,
-          data: data,
-          method: "post", // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-          header: header, // 设置请求的 header
-          success: (res) => {
-            console.log(res);
-            if (sign === "submit") {
-              if (this.type === "isKnowledge") {
-                Taro.hideLoading();
-                this.type = "";
-                let pages = getCurrentPages();
-                let prevPage = pages[pages.length - 2];
-                prevPage.setData({
-                  examId: this.examId,
-                });
-                prevPage.getList(prevPage.data.examId);
-                Taro.navigateBack({
-                  delta: 1,
-                });
-              } else {
-                Taro.hideLoading();
-                Taro.reLaunch({
-                  url: `/pages/detectResult/index?data=${JSON.stringify(
-                    res.data.data
-                  )}`,
-                });
-              }
-            }
-          },
-          fail: function () {
-            // fail
-          },
-          // 防止请求不成功一直 loading
-          complete: () => {
-            Taro.hideLoading();
-          },
-        });
+      if (this.type === "isKnowledge") {
+        url = "/api/exam/dealKnowledgeExam";
+        data = this.examKnowledgeTemp;
+      } else {
+        url = "/api/exam/dealSectionExam";
+        data = this.examSectionTemp;
+      }
+      const res = await request.post({
+        url,
+        params: { ...data },
       });
+      if (res.data.status === 200) {
+        if (sign === "submit") {
+          if (this.type === "isKnowledge") {
+            Taro.hideLoading();
+            this.type = "";
+            let pages = getCurrentPages();
+            let prevPage = pages[pages.length - 2];
+            prevPage.setData({
+              examId: this.examId,
+            });
+            prevPage.getList(prevPage.data.examId);
+            Taro.navigateBack({
+              delta: 1,
+            });
+          } else {
+            Taro.hideLoading();
+            Taro.reLaunch({
+              url: `/pages/detectResult/index?data=${JSON.stringify(
+                res.data.data
+              )}`,
+            });
+          }
+        }
+      }
     },
     spendAllTime() {
       if (this.type === "isKnowledge") {
@@ -378,13 +357,11 @@ export default {
           `${this.examSectionTemp.timeWay}计时,倒计时总时间为${this.examSectionTemp.timeSecond}s`
         );
         this.examSectionTemp.dealType = 2;
-        console.log(this.examSectionTemp);
       }
       this.subOrSaveReq();
     },
     // 得到用户的答案
     getUserAnswer(e) {
-      console.log(e);
       // this.isMakeAllTopic()
       let userAnswers = this.userAnswers;
       let choosedTopicIndex = e.target.dataset.index;
@@ -407,7 +384,7 @@ export default {
         this.currentTopicIndex = currentTopicIndex;
       }, 300);
     },
-    isSubmit() {
+    isSubmited() {
       this.isSubmit = true;
     },
     // 提交答案
@@ -439,105 +416,89 @@ export default {
     },
 
     // 得到题目集合
-    getTopicsList(examId, knowledgePointId) {
+    async getTopicsList(examId, knowledgePointId) {
       if (this.type === "isKnowledge") {
-        request(
-          "api/exam/getKnowledgeExamOfUser",
-          "get",
-          {
-            examId,
-            knowledgePointId,
+        const res = await request.get({
+          url: "api/exam/getKnowledgeExamOfUser",
+          params: {
+            examId: Number(examId),
+            knowledgePointId: Number(knowledgePointId),
           },
-          (res) => {
-            console.log(res);
-            let tempArr = [];
-            let questionList = res.data;
-            let len = questionList.length;
-            let arr = new Array(len).fill(-1);
-            for (var i = 0; i < len; i++) {
-              tempArr.push({
-                questionId: questionList[i].id,
-                userAnswer: questionList[i].userAnswer,
-              });
-              console.log(questionList[i]);
-              if (
-                questionList[i].userAnswer !== 0 &&
-                questionList[i].judgeResult == 1
-              ) {
-                arr[i] = questionList[i].userAnswer - 1;
-              }
-            }
-            this.userAnswers = arr;
-            this.topicsList = questionList;
-            this.topicsLength = questionList.length;
-            this.tempSaveAns = tempArr;
-            this.examKnowledgeTemp.examId = examId;
-            this.examKnowledgeTemp.examItemTempList = tempArr;
-            console.log(arr);
-            console.log(this.examKnowledgeTemp.examItemTempList);
+          type: "form",
+        });
+        let tempArr = [];
+        let questionList = res.data.data;
+        let len = questionList.length;
+        let arr = new Array(len).fill(-1);
+        for (var i = 0; i < len; i++) {
+          tempArr.push({
+            questionId: questionList[i].id,
+            userAnswer: questionList[i].userAnswer,
+          });
+          if (
+            questionList[i].userAnswer !== 0 &&
+            questionList[i].judgeResult == 1
+          ) {
+            arr[i] = questionList[i].userAnswer - 1;
+          }
+        }
+        this.userAnswers = arr;
+        this.topicsList = questionList;
+        this.topicsLength = questionList.length;
+        this.tempSaveAns = tempArr;
+        this.examKnowledgeTemp.examId = examId;
+        this.examKnowledgeTemp.examItemTempList = tempArr;
 
-            if (arr[0] !== -1) {
-              let choosedTopicIndex = arr[0];
-              this.choosedTopicIndex = choosedTopicIndex;
-            }
-            this.forwardCount();
-          },
-          "form"
-        );
+        if (arr[0] !== -1) {
+          let choosedTopicIndex = arr[0];
+          this.choosedTopicIndex = choosedTopicIndex;
+        }
+        this.forwardCount();
       } else {
-        request(
-          "api/exam/getSectionExamOfUser",
-          "get",
-          {
-            examId,
-          },
-          (res) => {
-            console.log(res.data);
-            if (res.data.questionList) {
-              this.topicsList = res.data.questionList;
-              this.topicsLength = res.data.questionList.length;
-              this.examSectionTemp.examId = res.data.examId;
-              this.examSectionTemp.timeSecond = res.data.timeSecond;
-              this.examSectionTemp.timeWay = res.data.timeWay;
+        const res = await request.get({
+          url: "api/exam/getSectionExamOfUser",
+          params: { examId },
+          type: "form",
+        });
+        if (res.data.data.questionList) {
+          this.topicsList = res.data.data.questionList;
+          this.topicsLength = res.data.data.questionList.length;
+          this.examSectionTemp.examId = res.data.data.examId;
+          this.examSectionTemp.timeSecond = res.data.data.timeSecond;
+          this.examSectionTemp.timeWay = res.data.data.timeWay;
 
-              let len = this.topicsLength;
-              let list = this.topicsList;
-              let arr = new Array(len).fill(-1);
-              let tempArr = [];
-              for (let i = 0; i < len; ++i) {
-                let obj = {
-                  questionId: 0,
-                  userAnswer: 0,
-                };
-                obj.questionId = list[i].id;
-                obj.userAnswer = list[i].userAnswer;
-                if (obj.userAnswer !== 0) {
-                  arr[i] = obj.userAnswer - 1;
-                }
-                tempArr.push(obj);
-              }
-              this.userAnswers = arr;
-              this.tempSaveAns = tempArr;
-              console.log(arr);
-              console.log(this.examSectionTemp.examItemTempList);
-              if (arr[0] !== -1) {
-                let choosedTopicIndex = arr[0];
-                this.choosedTopicIndex = choosedTopicIndex;
-              }
-              if (this.examSectionTemp.timeWay === 0) {
-                this.runCountDown(this.examSectionTemp.timeSecond);
-              } else {
-                this.forwardCount();
-              }
+          let len = this.topicsLength;
+          let list = this.topicsList;
+          let arr = new Array(len).fill(-1);
+          let tempArr = [];
+          for (let i = 0; i < len; ++i) {
+            let obj = {
+              questionId: 0,
+              userAnswer: 0,
+            };
+            obj.questionId = list[i].id;
+            obj.userAnswer = list[i].userAnswer;
+            if (obj.userAnswer !== 0) {
+              arr[i] = obj.userAnswer - 1;
             }
-          },
-          "form"
-        );
+            tempArr.push(obj);
+          }
+          this.userAnswers = arr;
+          this.tempSaveAns = tempArr;
+          if (arr[0] !== -1) {
+            let choosedTopicIndex = arr[0];
+            this.choosedTopicIndex = choosedTopicIndex;
+          }
+          if (this.examSectionTemp.timeWay === 0) {
+            this.runCountDown(this.examSectionTemp.timeSecond);
+          } else {
+            this.forwardCount();
+          }
+        }
       }
     },
   },
   components: {
-    ExitModal,
     TopicsBtn,
     AnswerCard,
   },

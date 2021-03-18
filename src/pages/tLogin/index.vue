@@ -56,7 +56,6 @@ export default {
         url: 'api/teacherAccount/login',
         params: {email: account, psw: password},
       }).then( res => {
-        console.log(res);
         if(res.data.status === 200){
           Taro.showToast({title: "登录成功!", icon: "success"})
           Taro.setStorageSync('teacherToken', res.data.data.token)

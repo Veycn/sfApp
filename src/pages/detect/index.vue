@@ -8,13 +8,11 @@
       :interval="interval"
       :duration="duration"
     >
-      <block v-for="(item, index) in background" :key="index">
-        <swiper-item>
-          <view :data-url="item" @tap="skip" class="swiper-item">
-            <image class="lbt" :src="item" />
-          </view>
-        </swiper-item>
-      </block>
+      <swiper-item v-for="(item, index) in background" :key="index">
+        <view :data-url="item" @tap="skip" class="swiper-item">
+          <image class="lbt" :src="item" />
+        </view>
+      </swiper-item>
     </swiper>
     <view class="header">
       <view class="chapter">
@@ -25,20 +23,20 @@
         </view>
         <view class="tip">欢迎使用深辅智能在线教育</view>
       </view>
-      <view class="scroll">
-        <scroll-view class="scroller" scroll-x="true" style="width: 100%">
-          <block v-for="(item, index) in chapters" :key="index">
+      <view class="detect-scroll">
+        <scroll-view class="detect-scroller" scroll-x="true">
+          <template v-for="(item, index) in chapters" >
             <view
-              id=""
+              :key="index"
               class="item"
               :class="activeIndex === index ? '_active' : ''"
               :data-item="item"
-              :data-index="index"
+              :data-idx="index"
               @tap="chapterTap"
             >
               {{ item.chapter }}
             </view>
-          </block>
+          </template>
         </scroll-view>
       </view>
     </view>
@@ -54,9 +52,11 @@
 
 <script>
 import request from "../../utils/http";
+import SectionList from "../../components/sectionList/index.vue";
+import pic1 from "../../assets/pic/pic1.png";
+import pic2 from "../../assets/pic/pic2.png";
 import Taro from "@tarojs/taro";
 const app = Taro.getApp();
-import SectionList from "../../components/sectionList/index.vue";
 
 export default {
   name: "Detect",
@@ -76,18 +76,11 @@ export default {
       autoplay: true,
       interval: 2000,
       duration: 500,
-      background: ["../../assets/pic/pic1.png", "../../assets/pic/pic2.png"],
+      background: [pic1, pic2],
     };
   },
-  onLoad: function (options) {
+  onLoad: async function (options) {
     this.launch();
-    let { activeIndex } = this.data;
-    request.get("api/exam/getChapterList", "get", {}, (res) => {
-      if (res.status == 200) {
-        this.chapters = res.data;
-        this.getSections(res.data && res.data[activeIndex].id);
-      }
-    });
   },
   onShow() {
     try {
@@ -99,17 +92,22 @@ export default {
       console.log("从缓存中获取choosedTitle失败！");
     }
 
-    let { activeIndex } = this.data;
-    request("api/exam/getChapterList", "get", {}, (res) => {
-      if (res.status == 200) {
-        this.chapters = res.data;
-        this.getSections(res.data && res.data[activeIndex].id);
-      } else {
-        Taro.navigateTo({
-          url: "/pages/login/index",
-        });
-      }
-    });
+    const activeIndex = this.activeIndex;
+    request
+      .get({
+        url: "api/exam/getChapterList",
+        params: {},
+      })
+      .then((res) => {
+        if (res.data.status == 200) {
+          this.chapters = res.data.data;
+          this.getSections(res.data.data && res.data.data[activeIndex].id);
+        } else {
+          Taro.navigateTo({
+            url: "/pages/login/index",
+          });
+        }
+      });
   },
   methods: {
     skip(e) {
@@ -125,7 +123,6 @@ export default {
     },
     toDetect: function (e) {
       let { id, section, examid } = e.currentTarget.dataset;
-      console.log(e.currentTarget.dataset);
       Taro.navigateTo({
         url: `/pages/exam/index?knowledgePointId=${id}&&examId=${examid}`,
       });
@@ -150,30 +147,25 @@ export default {
     closeToast() {
       this.isToastShow = false;
     },
-    getSections(id) {
-      request(
-        "api/exam/getSectionList",
-        "get",
-        {
-          chapterId: id,
-        },
-        (res) => {
-          if (res.status === 200) {
-            this.seclist = res.data;
-            this.list = res.data;
-          } else {
-            Taro.showToast({
-              title: res.msg | "请求异常！",
-              icon: "none",
-            });
-          }
-        },
-        "form"
-      );
+    async getSections(id) {
+      const res = await request.get({
+        url: "api/exam/getSectionList",
+        params: { chapterId: id },
+        type: "form",
+      });
+      if (res.data.status === 200) {
+        this.seclist = [...res.data.data];
+        this.list = res.data.data;
+      } else {
+        Taro.showToast({
+          title: res.msg | "请求异常！",
+          icon: "none",
+        });
+      }
     },
     chapterTap(e) {
-      let { item, index } = e.currentTarget.dataset;
-      this.activeIndex = index;
+      let { item, idx } = e.currentTarget.dataset;
+      this.activeIndex = idx;
       this.getSections(item.id);
     },
     onCustomTap(e) {
@@ -208,7 +200,9 @@ export default {
     login() {
       Taro.getStorage({
         key: "userInfo",
-        success: (res) => {},
+        success: (res) => {
+          console.log("login success", res);
+        },
         fail: (res) => {
           console.log(res);
           Taro.navigateTo({
@@ -299,13 +293,14 @@ page {
   font-size: 24px;
   color: #1c1b1b;
 }
-.scroll {
+.detect-scroll {
   width: 588px;
   margin: auto;
 }
-.scroll .scroller {
+.detect-scroll .detect-scroller {
   width: 100%;
   height: 100px;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -313,7 +308,7 @@ page {
   white-space: nowrap;
 }
 
-.scroll .scroller .item {
+.detect-scroll .detect-scroller .item {
   display: inline-block;
   height: 100%;
   text-align: center;
@@ -325,7 +320,7 @@ page {
   border-bottom: 1px solid transparent;
 }
 
-.scroll .scroller .item._active {
+.detect-scroll .detect-scroller .item._active {
   color: #24dd88;
   border-bottom: 1px solid #24dd88;
 }

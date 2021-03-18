@@ -1,7 +1,7 @@
 <template>
   <view class="p-wrapper">
     <view class="drw">
-      <s-detectResult
+      <detect-result
         :resultArr="resultArr"
         :point-number="4"
         :title-list="titleList"
@@ -39,8 +39,7 @@ export default {
     };
   },
   onLoad: function (options) {
-    console.log(options.data);
-    let arr = this.resultArr;
+    let arr = [];
     let { ratio, rightNum, useTime, submitNum } = JSON.parse(options.data);
 
     arr.push(`${submitNum}题`);
@@ -50,7 +49,6 @@ export default {
     let s = useTime % 60;
     arr.push(`${m}分${s}秒`);
     this.resultArr = arr;
-    console.log(arr);
   },
 
   methods: {
@@ -58,7 +56,6 @@ export default {
       Taro.switchTab({ url: "/pages/detect/index" });
     },
     toCourse() {
-      app.globalData.hascustomize = true;
       Taro.switchTab({ url: "/pages/customize/index" });
     },
   },
@@ -69,125 +66,83 @@ export default {
 </script>
 
 <style lang="less">
-.p-container {
-  width: 100%;
-  height: 100%;
-  background: rgb(240, 242, 245);
-}
-
-page {
-  background-color: rgb(240, 242, 245);
-}
-
-.swiper {
-  height: 296px;
-  width: 100%;
-}
-.swiper-item {
-  height: 296px;
-  width: 100%;
-  line-height: 296px;
-  text-align: center;
-}
-.banner {
-  width: 100%;
-  height: 294px;
-}
-
-.banner > .ba {
-  width: 100%;
+.p-wrapper {
   height: 100%;
 }
 
-.header {
-  background: #fff;
+
+.p-wrapper .title {
+  width: 100%;
+  height: 200rpx;
 }
 
-.header .chapter {
+
+.p-wrapper .drw {
+  height: 40%;
+  padding-top: 120rpx;
   box-sizing: border-box;
-  padding: 40px 78px 10px;
   position: relative;
-  background-image: url("https://www.shenfu.online/pic/Image.png");
-  background-repeat: no-repeat;
-  background-size: 120px 74px;
-  background-position: 38px 40px;
 }
 
-.header .chapter .img {
-  width: 120px;
-  height: 74px;
-  vertical-align: middle;
+
+.p-wrapper .drw .dr {
+  display: block;
+}
+
+.p-wrapper .drw  .line {
   position: absolute;
-  left: 40px;
-  z-index: -1;
+  bottom: 0;
+  width: 594rpx;
+  height: 2rpx;
+  transform: translateX(78rpx);
+  background: rgb(230, 230, 230);
 }
 
-.lbt {
+
+.recommand {
   width: 100%;
-  height: 296px;
-}
-
-.header .chapter .txt {
-  font-weight: bold;
-  font-size: 48px;
-  padding-bottom: 20px;
-}
-
-.header .chapter .txt .down {
-  width: 31px;
-  height: 31px;
-  margin-left: 17px;
-}
-
-.header .chapter .tip {
-  font-size: 24px;
-  color: #1c1b1b;
-}
-.scroll {
-  width: 588px;
-  margin: auto;
-}
-.scroll .scroller {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.scroll .scroller .item {
-  display: inline-block;
-  height: 100%;
-  text-align: center;
-  margin-right: 90px;
-  font-size: 30px;
-  font-weight: bold;
+  height: 60%;
   box-sizing: border-box;
-  padding-top: 24px;
-  border-bottom: 1px solid transparent;
+  /* padding: 100rpx; */
+  text-align: center;
 }
 
-.scroll .scroller .item._active {
-  color: #24dd88;
-  border-bottom: 1px solid #24dd88;
+.recommand > .img {
+  margin-top: 75rpx;
 }
 
-.p-container .section-list {
-  width: 710px;
-  margin: 20px auto;
-  background-color: rgb(240, 242, 245);
-  padding-bottom: 20px;
+.recommand .big-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 26rpx;
 }
 
-.p-container .section-list .sec-wraps {
-  width: 705px;
-  margin: 0 auto 15px;
+.recommand .sub-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 42rpx;
+
 }
 
-.slide-image {
-  width: 100%;
-  height: 100%;
+.recommand .custom {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #15DA7F;
 }
+
+.recommand .exit {
+  width: 215rpx;
+  height: 60rpx;
+  background: #15DA7F;
+  border-radius: 30rpx;
+  position: absolute;
+  left: 50%;
+  bottom: 92rpx;
+  transform: translateX(-50%);
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #fff;
+  line-height: 60rpx;
+}
+
 </style>

@@ -1,15 +1,15 @@
 <template>
   <view class="wrapper">
-    <view class="tag" :style="{ background: activeColor }"></view>
+    <view class="tag"></view>
     <view class="title">
       <text class="text">{{ tagName }}</text>
     </view>
     <view class="content">
       <block v-for="(item, index) in renderList" :key="index">
         <view
-          class="item"
+          class="c-item"
           @tap="itemChoosed"
-          :style="{ background: activeIndex === index ? activeColor : '#ccc' }"
+          :style="{ background: activeIndex === index ? '#15DA7F' : 'transparent' }"
           :data-item="item"
           :data-index="index"
           >{{ item[type] }}</view
@@ -24,23 +24,22 @@
 </template>
 
 <script lang="ts">
-import Taro from '@tarojs/taro';
+import Taro from "@tarojs/taro";
 export default {
+  data() {
+    return {
+      activeIndex: -1,
+    };
+  },
   props: {
     tagName: String,
     renderList: Array,
     type: String,
     activeColor: String,
   },
-  data() {
-    return {
-      activeIndex: -1,
-    };
-  },
-
   methods: {
     itemChoosed(e) {
-      let { item, index } = e.currentTarget.dataset;
+      const { item, index } = e.target.dataset;
       this.activeIndex = index;
       Taro.eventCenter.trigger("tagBeChoosed", { item, index });
     },
@@ -58,7 +57,7 @@ export default {
 .wrapper {
   width: 700px;
   min-height: 270px;
-  background: #fff;
+  background: rgb(45, 45, 45);
   border-radius: 10px;
   margin: 0 auto;
   margin-bottom: 25px;
@@ -71,8 +70,9 @@ export default {
 .wrapper .tag {
   width: 84px;
   height: 40px;
-  background: royalblue;
+  background: #fff;
   position: absolute;
+  border-radius: 4px;
   left: -10px;
   top: 45px;
 }
@@ -82,7 +82,7 @@ export default {
 .wrapper .title .text {
   font-size: 48px;
   font-weight: bold;
-  color: rgba(28, 27, 27, 1);
+  color: #ffffff;
 }
 
 .content {
@@ -95,18 +95,18 @@ export default {
   flex-wrap: wrap;
 }
 
-.content .item {
-  display: inline-block;
+.content .c-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 132px;
   height: 60px;
-  background: #ccc;
-  text-align: center;
+  background: transparent;
   box-sizing: border-box;
   font-size: 21px;
-  line-height: 60px;
   margin: 0 20px 25px 20px;
   border-radius: 4px;
-  padding: 0 10px;
   color: #fff;
+  border: 1px solid #fff;
 }
 </style>

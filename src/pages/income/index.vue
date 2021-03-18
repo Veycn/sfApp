@@ -76,7 +76,6 @@ export default {
           'contentType': "application/json"
         },
         success: res => {
-           console.log(res);
            this.courseList = res.data.data;
         },
       })
