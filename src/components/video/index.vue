@@ -2,19 +2,19 @@
   <view class="video-wrapper">
     <view class="operation">
       <view class="operate" @tap="handleAction('like')">
-        <view class="operate-icon">1</view>
+        <text class="operate-icon iconfont icon-share"></text>
         <view class="operate-desc">123</view>
       </view>
       <view class="operate" @tap="handleAction('share')">
-        <view class="operate-icon">2</view>
+        <text class="operate-icon iconfont icon-like"></text>
         <view class="operate-desc">123</view>
       </view>
       <view class="operate" @tap="handleAction('similar')">
-        <view class="operate-icon">3</view>
+        <text class="operate-icon iconfont icon-similar big"></text>
         <view class="operate-desc">同类</view>
       </view>
       <view class="operate" @tap="handleAction('fullscreen')">
-        <view class="operate-icon">4</view>
+        <text class="operate-icon iconfont icon-full"></text>
         <view class="operate-desc">全屏</view>
       </view>
     </view>
@@ -104,7 +104,11 @@ export default Vue.extend({
       .operate-icon {
         width: 50px;
         height: 50px;
-
+        font-size: 50px;
+        font-weight: bold;
+        &.big{
+          font-size: 80px;
+        }
       }
       .operate-desc {
         font-size: 20px;

@@ -2,9 +2,9 @@
   "miniprogramRoot": "dist/",
   "projectname": "sfApp",
   "description": "深辅小程序",
-  "appid": "wxe5eb2f345aa2c46e",
+  "appid": "wx33c639555ff78ca4",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "postcss": false,
@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],

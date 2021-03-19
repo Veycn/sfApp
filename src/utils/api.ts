@@ -6,6 +6,11 @@ const API = {
       url: "/api",
       params
     });
+  },
+  getPrivateCourseList: () => {
+    return Services.get({
+      url: '/api/recommendCourse/getPrivateCourseList'
+    })
   }
 };
 
