@@ -4,7 +4,7 @@
   "description": "深辅小程序",
   "appid": "wx33c639555ff78ca4",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "postcss": false,
@@ -40,7 +40,5 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
   "condition": {}
 }

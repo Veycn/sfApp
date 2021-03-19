@@ -19,6 +19,7 @@
 
 <script>
 import VideoWindow from "../../components/video/index.vue";
+import API from '../../utils/api';
 export default {
   name: "Index",
   data() {
@@ -44,6 +45,11 @@ export default {
       endY: 0,
       activeIndex: 0,
     };
+  },
+  created(){
+    API.getPrivateCourseList().then(res => {
+      console.log(res);
+    }) 
   },
   methods: {
     // 到顶

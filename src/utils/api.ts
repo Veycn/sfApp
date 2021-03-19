@@ -2,10 +2,15 @@ import Services from "./http";
 
 const API = {
   getUserInfo: params => {
-    return Services.get({
+    return Services.post({
       url: "/api",
       params
     });
+  },
+  getPrivateCourseList: () => {
+    return Services.get({
+      url: '/api/recommendCourse/getPrivateCourseList'
+    })
   }
 };
 
