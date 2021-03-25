@@ -1,9 +1,9 @@
 <template>
   <view class="course">
     <view class="header flex f-fd-r f-jc-sb f-ai-c">
-      <view class="title">一元一次方程解法详解</view>
+      <view class="title">{{title}}</view>
       <view class="price">
-        <text class="num">0.9</text>
+        <text class="num">{{price}}</text>
         <text class="sig">元</text>
       </view>
     </view>
@@ -23,10 +23,10 @@
     </view>
     <view class="bottom flex f-fd-r f-jc-sb f-ai-c">
       <view class="teacher flex f-fd-r f-ai-c">
-        <image src="" class="avatar"></image>
-        <view class="text">主讲师：考神</view>
+        <image :src="teacherImage" class="avatar"></image>
+        <view class="text">主讲师：{{teacherName}}</view>
       </view>
-      <template v-if="true">
+      <template v-if="!isBuy">
         <view class="buy active" @tap="toBuy">购买</view>
       </template>
       <template v-else>
@@ -40,7 +40,29 @@
 export default {
   name: 'Course',
   props: {
-
+    title:String,
+    section:String,
+    courseId:Number,
+    courseDuration:String,
+    teacherName:String,
+    teacherImage:String,
+    courseImage:String,
+    courseStatus: Number,
+    groupInfo: null,
+    _income: String,
+    price:String,
+    sales: Number,
+    section: String,
+    stars:Number,
+    videoId:String,
+    source: String, // 组件被哪个页面使用
+    playId: String,  // 视频播放id
+    courseName: String, // 课程名称
+    courseIntro: String, // 视频课程介绍,
+    isBuy:{
+      type:Boolean,
+      value:false
+    }, // 是否购买过
   },
   data(){
     return {}
@@ -61,6 +83,7 @@ export default {
 
 <style lang="less">
 .course{
+  margin: 10px 26px;
   padding: 46px 40px;
   background-color: #2d2d2d;
   color: #fff;

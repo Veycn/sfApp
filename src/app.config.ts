@@ -10,6 +10,7 @@ export default {
     "pages/tLogin/index",
     "pages/income/index",
     "pages/points/index",
+    "pages/search/index",
   ],
   window: {
     backgroundTextStyle: "light",
