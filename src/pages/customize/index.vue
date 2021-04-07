@@ -10,7 +10,7 @@
         :scrollIntoView="toView"
       >
         <template v-for="video in list">
-          <video-window :id="video.id" :key="video.id"></video-window>
+          <video-window :id="video.scrollId" :key="video.id" :video="video"></video-window>
         </template>
       </scroll-view>
     </view>
@@ -24,23 +24,7 @@ export default {
   name: "Index",
   data() {
     return {
-      list: [
-        {
-          id: "e12345",
-        },
-        {
-          id: "d5432",
-        },
-        {
-          id: "a1231231",
-        },
-        {
-          id: "a1231261",
-        },
-        {
-          id: "a1211231",
-        },
-      ],
+      list: [],
       startY: 0,
       endY: 0,
       activeIndex: 0,
@@ -49,6 +33,10 @@ export default {
   created(){
     API.getPrivateCourseList().then(res => {
       console.log(res);
+      const list = res.data.data.forEach(video => {
+        video['scrollId'] = 'v' + video.id
+      })
+      this.list = res.data.data
     }) 
   },
   methods: {
@@ -98,7 +86,7 @@ export default {
   computed: {
     toView() {
       return (
-        (this.list[this.activeIndex] && this.list[this.activeIndex]['id']) || ""
+        (this.list[this.activeIndex] && this.list[this.activeIndex]['scrollId']) || ""
       );
     },
   },

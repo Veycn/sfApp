@@ -103,8 +103,8 @@ export default {
           this.chapters = res.data.data;
           this.getSections(res.data.data && res.data.data[activeIndex].id);
         } else {
-          Taro.navigateTo({
-            url: "/pages/login/index",
+          Taro.switchTab({
+            url: "/pages/user/index",
           });
         }
       });
@@ -191,8 +191,8 @@ export default {
         },
         fail: (res) => {
           // token 获取失败
-          Taro.navigateTo({
-            url: "/pages/login/index",
+          Taro.switchTab({
+            url: "/pages/user/index",
           });
         },
       });
@@ -205,8 +205,8 @@ export default {
         },
         fail: (res) => {
           console.log(res);
-          Taro.navigateTo({
-            url: "/pages/login/index",
+          Taro.switchTab({
+            url: "/pages/user/index",
           });
         },
       });

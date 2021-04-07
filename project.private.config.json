@@ -29,6 +29,12 @@
           "pathName": "pages/mycourse/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/similar/index",
+          "pathName": "pages/similar/index",
+          "query": "courseId=10",
+          "scene": null
         }
       ]
     }
