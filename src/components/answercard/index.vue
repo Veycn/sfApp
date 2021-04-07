@@ -3,7 +3,7 @@
     <view class="content" :animation="btnAnimation">
       <view class="exit" @tap="onClose">
         答题卡
-        <image class="img" src="../../assets/icon/exit_pic.png" />
+        <image class="img" src="https://www.shenfu.online/pic/icon/exit_pic.png" />
       </view>
       <slot name="scantron" />
       <view class="tip" @tap="watchResult">交卷并查看结果</view>

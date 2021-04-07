@@ -1,7 +1,7 @@
 <template>
   <view class="p-wrapper">
     <view class="banner">
-      <image class="bg" src="../../assets/pic/jhbg.png" />
+      <image class="bg" src="https://www.shenfu.online/pic/jhbg.png" />
       <text class="c">{{ sectionName }}</text>
       <text class="s">欢迎使用深辅智能在线教育</text>
     </view>
@@ -24,7 +24,7 @@
       <image
         class="btn"
         @tap="customize"
-        src="../../assets/pic/btn_curriculum.png"
+        src="https://www.shenfu.online/pic/btn_curriculum.png"
       />
       <text class="txt">深辅AI智能精选课程</text>
     </view>

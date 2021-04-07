@@ -2,16 +2,16 @@
   <view class="p-container">
   <!-- <image class="bg" mode="widthFix" src="../../assets/pic/login_bg.png"/> -->
   <view class="logo">
-    <image class="pic" src="../../assets/icon/login_logo1.png"/>
+    <image class="pic" src="https://www.shenfu.online/pic/icon/login_logo1.png"/>
     <text class="title">深辅AI·教师中心</text>
   </view>
   <view class="form">
     <view class="accout item">
-      <image src="../../assets/icon/acc.png" class="icon" mode="widthFix"></image>
+      <image src="https://www.shenfu.online/pic/icon/acc.png" class="icon" mode="widthFix"></image>
       <input type="text" placeholder="请输入手机号/邮箱" class="ipt" @Input="onChange" data-type="acc"/>
     </view> 
     <view class="password item">
-      <image src="../../assets/icon/password.png" class="icon"  mode="widthFix"></image>
+      <image src="https://www.shenfu.online/pic/icon/password.png" class="icon"  mode="widthFix"></image>
       <input type="password" placeholder="请输入密码" class="ipt"  @Input="onChange" data-type="pas"/>
     </view>
   </view>

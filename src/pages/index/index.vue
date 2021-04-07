@@ -20,7 +20,7 @@
         @tagBeChoosed="versionChoosed"
       ></choose-board>
       <view class="to-learn" @tap="startStudy">
-        <image class="pic" src="../../assets/pic/icon_open.png" />
+        <image class="pic" src="https://www.shenfu.online/pic/icon_open.png" />
       </view>
       <block v-if="isChoosed">
         <tip-windows @exitModal="exitModal" />
