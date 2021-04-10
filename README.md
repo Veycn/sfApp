@@ -13,6 +13,7 @@
 #### 静态文件
 
 除了页面底部的tabbar需要的icon，其他的图片都上传cdn，不要放在项目里面
+- https://www.shenfu.online/pic/
 
 iconfont 根据需求协调UI在阿里icon上下载
 

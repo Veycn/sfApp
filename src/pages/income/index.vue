@@ -1,13 +1,13 @@
 <template>
 <view class="view">
-  <image src="../../assets/icon/teacherbanner.png" mode="widthFix" class="banner"></image>
+  <image src="https://www.shenfu.online/pic/icon/teacherbanner.png" mode="widthFix" class="banner"></image>
   <view class="content">
     <view class="item" style="background-color: rgb(21,218,127);">
-      <image src="../../assets/icon/book.png" mode="widthFix" class="icon"></image>
+      <image src="https://www.shenfu.online/pic/icon/book.png" mode="widthFix" class="icon"></image>
       <text class="txt">课程总收入: ¥{{Income.totalIncome}}元</text>
     </view>
     <view class="item" style="background-color: rgb(58,120,253);">
-      <image src="../../assets/icon/graph.png" mode="widthFix" class="icon"></image>
+      <image src="https://www.shenfu.online/pic/icon/graph.png" mode="widthFix" class="icon"></image>
       <text class="txt">我的总收入: ¥{{Income.teacherTotalIncome}}元</text>
     </view>
   </view>
@@ -15,7 +15,7 @@
     <descourse :courseId="item.id" :group-info="item['group_info']" 
       :title="item.course_name"
       :course-duration="item.course_duration" :teacherName="item.teacher_name"
-      :teacherImage="item.teacher_avatar?item.teacher_avatar:'../../assets/icon/pic.png'"
+      :teacherImage="item.teacher_avatar?item.teacher_avatar:'https://www.shenfu.online/pic/icon/pic.png'"
       :sales="item['course_sales']"  :section="item['course_section']"
       :courseImage="item.course_cover_url" :stars="item.course_stars" :course-name="item.course_name"
       :_income="item.income"

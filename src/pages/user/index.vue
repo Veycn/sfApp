@@ -5,22 +5,22 @@
       <text class="userName">{{userInfo.nickName}}</text>
    </view>
    <view class="userInfo flex f-ai-c" v-else>
-      <image src='../../assets/icon/user.png'></image>
+      <image src='https://www.shenfu.online/pic/icon/user.png'></image>
       <button class="userName loginbtn" @tap="login" open-type="getUserInfo" style="background:black;">登录</button>
    </view>
 
     <view class="operate">
     <view class="common flex f-ai-c f-jc-sb" @tap='toGrade'>
       <text style="color:white;">{{bookInfo || '暂无记录, 登录后可选择或查看哦.'}}</text>
-      <image src="../../assets/icon/right.png"></image>
+      <image src="https://www.shenfu.online/pic/icon/right.png"></image>
     </view>
     <button class="common btn flex f-ai-c f-jc-sb" open-type="contact">
       <text style="color:white;">我的客服</text>
-      <image src="../../assets/icon/right.png"></image>
+      <image src="https://www.shenfu.online/pic/icon/right.png"></image>
     </button>
     <view class="common flex f-ai-c f-jc-sb" @tap="tLogin">
       <text style="color:white;">教师中心</text>
-      <image src="/assets/icon/right.png"></image>
+      <image src="https://www.shenfu.online/pic/icon/right.png"></image>
     </view>
     </view>
     <view class="logout" v-if="isLogin">

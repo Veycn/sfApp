@@ -2,7 +2,7 @@
   <view class="t-container">
     <view class="t-wrap">
       <view class="tip-logo" @tap="exitModal"
-        ><image mode="widthFix" src="../../assets/icon/exit2.png"></image
+        ><image mode="widthFix" src="https://www.shenfu.online/pic/icon/exit2.png"></image
       ></view>
       <view class="tip-text">* 需要选中科目、教材和版本</view>
     </view>

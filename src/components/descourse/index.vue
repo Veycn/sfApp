@@ -9,7 +9,7 @@
       <text class="buynum">{{sales}}人已购</text>
       <text class="space">|</text>
       <text class="star">{{stars}}</text>
-      <image src="../../assets/icon/star.png" class="starImage"></image>
+      <image src="https://www.shenfu.online/pic/icon/star.png" class="starImage"></image>
     </view>
 
     <view class="teacher">

@@ -97,10 +97,6 @@ const header = {
 import TopicsBtn from "../../components/topicsbtn/index.vue";
 import AnswerCard from "../../components/answercard/index.vue";
 
-import clock from "../../assets/icon/clock.png";
-import icon_circle from "../../assets/icon/icon_circle.png";
-import icon_poss from "../../assets/icon/icon_poss.png";
-
 export default {
   props: {
     currentSubjects: {
@@ -114,9 +110,9 @@ export default {
   },
   data() {
     return {
-      szimg: clock,
-      tyimg: icon_circle,
-      psimg: icon_poss,
+      szimg: 'https://www.shenfu.online/pic/icon/clock.png',
+      tyimg: 'https://www.shenfu.online/pic/icon/icon_circle.png',
+      psimg: 'https://www.shenfu.online/pic/icon/icon_poss.png',
       minutes: "00",
       seconds: "00",
       timer: null, // 倒计时 器

@@ -20,7 +20,7 @@
             @tap="toExam"
           >
             <view v-if="item['status'] === 1 && item['ratio'] < 0.25">
-              <image class="image" :src="didimg1"></image>
+              <image class="image" src="https://www.shenfu.online/pic/paper1.png"></image>
               <text class="paper-name">{{ item["exam"] }}</text>
             </view>
             <view
@@ -30,7 +30,7 @@
                 item['ratio'] < 0.5
               "
             >
-              <image class="image" :src="didimg2"></image>
+              <image class="image" src="https://www.shenfu.online/pic/paper2.png"></image>
               <text class="paper-name">{{ item["exam"] }}</text>
             </view>
             <view
@@ -40,15 +40,15 @@
                 item['ratio'] < 0.75
               "
             >
-              <image class="image" :src="didimg3"></image>
+              <image class="image" src="https://www.shenfu.online/pic/paper3.png"></image>
               <text class="paper-name">{{ item["exam"] }}</text>
             </view>
             <view v-else-if="item['status'] === 1 && item['ratio'] >= 0.75">
-              <image class="image" :src="didimg4"></image>
+              <image class="image" src="https://www.shenfu.online/pic/paper4.png"></image>
               <text class="paper-name">{{ item["exam"] }}</text>
             </view>
             <view v-else>
-              <image class="image" :src="nodidimg"></image>
+              <image class="image" src="https://www.shenfu.online/pic/paper0.png"></image>
               <text class="nopaper-name">{{ item["exam"] }}</text>
             </view>
           </view>
@@ -60,20 +60,10 @@
 
 <script lang="ts">
 import Taro from "@tarojs/taro";
-import paper0 from "../../assets/pic/paper0.png";
-import paper1 from "../../assets/pic/paper1.png";
-import paper2 from "../../assets/pic/paper2.png";
-import paper3 from "../../assets/pic/paper3.png";
-import paper4 from "../../assets/pic/paper4.png";
 
 export default {
   data() {
     return {
-      didimg1: paper1,
-      didimg2: paper2,
-      didimg3: paper3,
-      didimg4: paper4,
-      nodidimg: paper0,
       status: 0,
     };
   },

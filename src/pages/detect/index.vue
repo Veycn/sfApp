@@ -19,13 +19,17 @@
         <image class="img" src="https://www.shenfu.online/pic/Image.png" />
         <view class="txt">
           {{ subjectVersion }}
-          <image class="down" @tap="reselect" src="../../assets/pic/down.png" />
+          <image
+            class="down"
+            @tap="reselect"
+            src="https://www.shenfu.online/pic/down.png"
+          />
         </view>
         <view class="tip">欢迎使用深辅智能在线教育</view>
       </view>
       <view class="detect-scroll">
         <scroll-view class="detect-scroller" scroll-x="true">
-          <template v-for="(item, index) in chapters" >
+          <template v-for="(item, index) in chapters">
             <view
               :key="index"
               class="item"
@@ -53,8 +57,6 @@
 <script>
 import request from "../../utils/http";
 import SectionList from "../../components/sectionList/index.vue";
-import pic1 from "../../assets/pic/pic1.png";
-import pic2 from "../../assets/pic/pic2.png";
 import Taro from "@tarojs/taro";
 const app = Taro.getApp();
 
@@ -76,7 +78,10 @@ export default {
       autoplay: true,
       interval: 2000,
       duration: 500,
-      background: [pic1, pic2],
+      background: [
+        "https://www.shenfu.online/pic/pic1.png",
+        "https://www.shenfu.online/pic/pic2.png",
+      ],
     };
   },
   onLoad: async function (options) {
