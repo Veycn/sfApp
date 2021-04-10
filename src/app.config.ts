@@ -2,6 +2,7 @@ export default {
   pages: [
     "pages/index/index",
     "pages/customize/index",
+    "pages/live/index",
     "pages/mycourse/index",
     "pages/user/index",
     "pages/exam/index",
@@ -11,6 +12,7 @@ export default {
     "pages/income/index",
     "pages/points/index",
     "pages/similar/index",
+    "pages/search/index",
   ],
   window: {
     backgroundTextStyle: "light",
@@ -25,6 +27,12 @@ export default {
         text: "定制课程",
         iconPath: "assets/icon/b.png",
         selectedIconPath: "assets/icon/b_active.png"
+      },
+      {
+        pagePath: "pages/live/index",
+        text: "直播课",
+        iconPath: "assets/icon/a.png",
+        selectedIconPath: "assets/icon/a_active.png"
       },
       {
         pagePath: "pages/detect/index",

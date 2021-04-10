@@ -34,6 +34,9 @@ export default {
 
     }
   },
+  created() {
+    console.log(this.title, this.courseName);
+  },
   props:{
     title:String,
     section:String,

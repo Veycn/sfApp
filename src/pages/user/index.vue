@@ -184,20 +184,23 @@ export default {
       })
     },
     tLogin() {
-      wx.showModal({
-        title: '提示',
-        content: '将要通过登录教师账号前往教师管理界面, 是否前往?',
-        success(res) {
-          if (res.confirm) {
-            Taro.navigateTo({
-              url: '/pages/tLogin/index',
-            })
-            console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
+      Taro.navigateTo({
+        url: '/pages/search/index'
+      });
+      // wx.showModal({
+      //   title: '提示',
+      //   content: '将要通过登录教师账号前往教师管理界面, 是否前往?',
+      //   success(res) {
+      //     if (res.confirm) {
+      //       Taro.navigateTo({
+      //         url: '/pages/tLogin/index',
+      //       })
+      //       console.log('用户点击确定')
+      //     } else if (res.cancel) {
+      //       console.log('用户点击取消')
+      //     }
+      //   }
+      // })
     },
   }
 }

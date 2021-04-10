@@ -1,5 +1,6 @@
 <template>
   <view class="index">
+    <view class="search" @tap="toSearch">搜索</view>
     <view class="list-wrapper" @touchstart="touchstart" @touchend="touchend">
       <scroll-view
         class="scroller"
@@ -20,6 +21,7 @@
 <script>
 import VideoWindow from "../../components/video/index.vue";
 import API from '../../utils/api';
+import Taro from '@tarojs/taro';
 export default {
   name: "Index",
   data() {
@@ -82,6 +84,9 @@ export default {
         }
       }
     },
+    toSearch(){
+      Taro.navigateTo({url: `/pages/search/index`})
+    }
   },
   computed: {
     toView() {
@@ -99,6 +104,17 @@ export default {
 <style lang="less">
 .index {
   height: 100%;
+  position: relative;
+  .search{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    color: #fff;
+    width: 100px;
+    height: 40px;
+    background-color: red;
+    z-index: 9999;
+  }
   .list-wrapper {
     height: 100%;
     overflow: scroll;
