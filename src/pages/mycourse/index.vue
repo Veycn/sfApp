@@ -26,32 +26,67 @@
       </view>
     </view>
     <view class="courses">
-      <course></course>
+      <template v-for="c in myBuys">
+        <course
+          :title="c.courseName"
+          :is-buy="true"
+          :sales="c.courseSales"
+          :stars="c.courseStars"
+          :teacher-name="c.teacherName"
+          :teacherImage="c.teacherAvatar"
+          :handleTap="toPlay"
+          :videoId="c.courseId"
+          :playId="c.ossVideoId"
+          :poster="c.courseCoverUrl"
+          :relay="c.relayNum"
+        ></course>
+      </template>
     </view>
   </view>
 </template>
 
 <script>
-import Course from '../../components/course/index.vue';
+import API from "../../utils/api";
+import Taro from "@tarojs/taro"
+import Course from "../../components/course/index.vue";
 export default {
   name: "Index",
   data() {
     return {
       activeTab: "buy",
+      myBuys: [],
     };
   },
+  created() {
+    this.getMyCourse();
+  },
+
   methods: {
-    changeTab(tab){
-      this.activeTab = tab
-    }
+    getMyCourse() {
+      API.getMyCourseList().then((res) => {
+        console.log(res);
+        this.myBuys = res?.data?.data || [];
+      });
+    },
+    changeTab(tab) {
+      this.activeTab = tab;
+    },
+    toPlay(videoId, playId, sales, stars, poster) {
+      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${videoId}&sales=${sales}&stars=${stars}&poster=${poster}`})
+    },
   },
   components: {
-    Course
+    Course,
   },
 };
 </script>
 
 <style lang="less">
+.index{
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
 .tab {
   height: 152px;
   background-color: #000;
@@ -62,7 +97,7 @@ export default {
       color: #808080;
       font-size: 30px;
     }
-    .number{
+    .number {
       font-size: 22px;
       color: #808080;
       position: relative;
@@ -70,7 +105,7 @@ export default {
       left: 2px;
     }
     &.active::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       bottom: 0;
@@ -82,7 +117,7 @@ export default {
   }
 }
 
-.courses{
+.courses {
   padding: 25px;
 }
 </style>

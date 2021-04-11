@@ -1,24 +1,24 @@
 <template>
-  <view class="course">
+  <view class="course" @tap="onTap">
     <view class="header flex f-fd-r f-jc-sb f-ai-c">
       <view class="title">{{title}}</view>
       <view class="price">
-        <text class="num">{{price}}</text>
+        <text class="num">{{price || '0'}}</text>
         <text class="sig">元</text>
       </view>
     </view>
     <view class="info flex f-fd-r f-ai-c f-jc-fs">
       <view class="info-item flex f-fd-r f-ai-c">
-        <text class="iconfont icon-share">12</text>
-        <text class="text">123</text>
+        <text class="iconfont icon-share f-40"></text>
+        <text class="text ml-10">{{relay || 0}}</text>
       </view>
       <view class="info-item flex f-fd-r f-ai-c">
-        <text class="iconfont icon-like">12</text>
-        <text class="text">123</text>
+        <text class="iconfont icon-like1 f-40 red"></text>
+        <text class="text ml-10">{{stars || 0}}</text>
       </view>
       <view class="info-item flex f-fd-r f-ai-c">
-        <text class="iconfont icon-similar">12</text>
-        <text class="text">123</text>
+        <text class="iconfont icon-cart f-48"></text>
+        <text class="text ml-10">{{sales || 0}}</text>
       </view>
     </view>
     <view class="bottom flex f-fd-r f-jc-sb f-ai-c">
@@ -54,15 +54,18 @@ export default {
     sales: Number,
     section: String,
     stars:Number,
-    videoId:String,
+    videoId:Number | String,
     source: String, // 组件被哪个页面使用
     playId: String,  // 视频播放id
     courseName: String, // 课程名称
     courseIntro: String, // 视频课程介绍,
+    relay: Number,
     isBuy:{
       type:Boolean,
       value:false
     }, // 是否购买过
+    poster: String,
+    handleTap: Function
   },
   data(){
     return {}
@@ -73,6 +76,9 @@ export default {
   methods: {
     toBuy(){
 
+    },
+    onTap(){
+      this.handleTap && this.handleTap(this.videoId, this.playId, this.sales, this.stars, this.poster)
     }
   },
   computed: {

@@ -1,7 +1,7 @@
 export default {
   pages: [
-    "pages/index/index",
     "pages/customize/index",
+    "pages/index/index",
     "pages/live/index",
     "pages/mycourse/index",
     "pages/user/index",
@@ -13,6 +13,7 @@ export default {
     "pages/points/index",
     "pages/similar/index",
     "pages/search/index",
+    "pages/play/index",
   ],
   window: {
     backgroundTextStyle: "light",

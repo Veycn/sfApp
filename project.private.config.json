@@ -35,6 +35,29 @@
           "pathName": "pages/similar/index",
           "query": "courseId=10",
           "scene": null
+        },
+        {
+          "name": "pages/play/index",
+          "pathName": "pages/play/index",
+          "query": "courseId=10",
+          "scene": null
+        },
+        {
+          "name": "pages/live/index",
+          "pathName": "pages/live/index",
+          "query": "courseId=10",
+          "scene": null
+        },
+        {
+          "name": "pages/user/index",
+          "pathName": "pages/user/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/search/index",
+          "pathName": "pages/search/index",
+          "scene": null
         }
       ]
     }

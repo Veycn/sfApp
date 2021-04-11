@@ -22,7 +22,6 @@ const request = (url: string, params: object, method: Method=Method.GET, type?: 
   } else {
     contentType = "application/json";
   }
-  console.log(method);
   return Taro.request({
     url: BASE+url,
     data: params,

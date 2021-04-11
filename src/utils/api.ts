@@ -21,14 +21,14 @@ const API = {
   // 给课程点赞
   starCourse(params){
     return Services.post({
-      url: '/api/userCourse/updateCourseStars',
+      url: `/api/userCourse/updateCourseStars?courseId=${params.courseId}&courseStars=${params.courseStars}`,
       params
     })
   },
   // 获取课程支付信息
   getPayInfo(params){
     return Services.post({
-      url: '/api/wxPay/placeOrder',
+      url: `api/wxPay/placeOrder?courseId=${params.courseId}`,
       params
     })
   },
@@ -36,6 +36,27 @@ const API = {
     return Services.get({
       url: '/api/recommendCourse/getSimilarCourse',
       params
+    })
+  },
+  getMyCourseList(){
+    return Services.get({
+      url: 'api/userCourse/getMyCourseList',
+    })
+  },
+  userLogin(params){
+    return Services.post({
+      url: 'api/userAccount/login',
+      params
+    })
+  },
+  getBookInfo(){
+    return Services.get({
+      url: 'api/exam/getUserTextbookInfo',
+    })
+  },
+  updateRelay(params){
+    return Services.post({
+      url: `api/userCourse/updateCourseRelayNum?courseId=${params.courseId}&relayNum=${params.relayNum}`,
     })
   }
 };

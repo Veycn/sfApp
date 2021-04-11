@@ -1,6 +1,6 @@
 <template>
   <view class="index">
-    <view class="search" @tap="toSearch">搜索</view>
+    <view class="search" @tap="toSearch"><text class="iconfont icon-search f-48 bold"></text></view>
     <view class="list-wrapper" @touchstart="touchstart" @touchend="touchend">
       <scroll-view
         class="scroller"
@@ -11,7 +11,7 @@
         :scrollIntoView="toView"
       >
         <template v-for="video in list">
-          <video-window :id="video.scrollId" :key="video.id" :video="video"></video-window>
+          <video-window :id="video.scrollId" :key="video.id" :video="video" :requestFull="fullScreen"></video-window>
         </template>
       </scroll-view>
     </view>
@@ -29,17 +29,22 @@ export default {
       list: [],
       startY: 0,
       endY: 0,
-      activeIndex: 0,
+      activeIndex: -1,
+      activeId: 0,
+      videoContext: null
     };
   },
   created(){
     API.getPrivateCourseList().then(res => {
-      console.log(res);
-      const list = res.data.data.forEach(video => {
-        video['scrollId'] = 'v' + video.id
+      const list = res.data.data || []
+      list.forEach(video => {
+        video['scrollId'] = 'sf_v' + video.id
       })
-      this.list = res.data.data
+      this.list = list
     }) 
+  },
+  mounted(){
+    this.activeIndex = 0
   },
   methods: {
     // 到顶
@@ -54,7 +59,11 @@ export default {
     scroll(e) {
       e.preventDefault();
       this.offsetY = e.detail.deltaY;
-      // console.log(e);
+    },
+    fullScreen(){
+      this.videoContext.requestFullScreen({
+        direction: 90
+      })
     },
     touchstart(e) {
       this.startY = e.changedTouches[0].pageY;
@@ -70,6 +79,8 @@ export default {
           console.log(1);
           if (this.activeIndex > 0) {
             this.activeIndex--;
+            this.videoContext.stop();
+            this.videoContext = null;
           } else {
             console.log("to top");
           }
@@ -78,6 +89,8 @@ export default {
           console.log(2);
           if (this.activeIndex < videoAmount) {
             this.activeIndex++;
+            this.videoContext.stop();
+            this.videoContext = null;
           } else {
             console.log("load more");
           }
@@ -90,10 +103,11 @@ export default {
   },
   computed: {
     toView() {
-      return (
-        (this.list[this.activeIndex] && this.list[this.activeIndex]['scrollId']) || ""
-      );
-    },
+      const view = (this.list[this.activeIndex] && this.list[this.activeIndex]['scrollId']) || "";
+      this.videoContext = Taro.createVideoContext(view);
+      this.videoContext.play()
+      return view;
+    }
   },
   components: {
     VideoWindow,
@@ -107,12 +121,10 @@ export default {
   position: relative;
   .search{
     position: absolute;
-    right: 30px;
+    right: 48px;
     top: 30px;
     color: #fff;
-    width: 100px;
     height: 40px;
-    background-color: red;
     z-index: 9999;
   }
   .list-wrapper {

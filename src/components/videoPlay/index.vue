@@ -33,21 +33,18 @@ export default {
       showPlay: true
     }
   },
-  created(){
+  mounted(){
     const {isPurchase, ossVideoId = '', id} = this.video;
-    this.videoContext = Taro.createVideoContext('sfv_'+this.video.id)
     const isTry = isPurchase ? false : true;
     API.getVideoPlayInfo({
       isTry: false,
       videoPlayId: ossVideoId
     }).then(res => {
-      console.log(res);
       res = res.data.data;
       this.playUrl = res.playURL
     })
   },
   methods: {
-    
     playVideo(){
       this.videoContext.play();
       this.showPlay = false;
