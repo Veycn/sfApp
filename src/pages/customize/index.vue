@@ -31,22 +31,36 @@ export default {
       endY: 0,
       activeIndex: -1,
       activeId: 0,
-      videoContext: null
+      videoContext: null,
+      pageNum: 0,
+      pageSize: 5,
+      total: 1
     };
   },
+  onHide(){
+    this.videoContext.stop()
+  },
   created(){
-    API.getPrivateCourseList().then(res => {
-      const list = res.data.data || []
-      list.forEach(video => {
-        video['scrollId'] = 'sf_v' + video.id
-      })
-      this.list = list
-    }) 
+    this.getCourse()
   },
   mounted(){
     this.activeIndex = 0
   },
   methods: {
+    getCourse(){
+      if(!this.hasNext) return Taro.showToast({title: "没有更多了", icon: "none"});
+      API.getPrivateCourseList({
+        pageNum: ++this.pageNum,
+        pageSize: this.pageSize
+      }).then(res => {
+        const list = res?.data?.data?.list || []
+        list.forEach(video => {
+          video['scrollId'] = 'sf_v' + video.id
+        })
+        this.list = this.list.concat(list);
+        this.total = res?.data?.data?.total || 0
+      }) 
+    },
     // 到顶
     upper(e) {
       console.log(e);
@@ -93,6 +107,7 @@ export default {
             this.videoContext = null;
           } else {
             console.log("load more");
+            this.getCourse()
           }
         }
       }
@@ -101,12 +116,24 @@ export default {
       Taro.navigateTo({url: `/pages/search/index`})
     }
   },
+  watch: {
+    'list.length': function(newVal, oldVal){
+      if(newVal >= 10 ){
+        const list = this.list;
+        list.splice(0, 5);
+        this.list = list;
+      }
+    }
+  },
   computed: {
     toView() {
       const view = (this.list[this.activeIndex] && this.list[this.activeIndex]['scrollId']) || "";
       this.videoContext = Taro.createVideoContext(view);
       this.videoContext.play()
       return view;
+    },
+    hasNext(){
+      return this.list.length < this.total
     }
   },
   components: {
@@ -119,6 +146,7 @@ export default {
 .index {
   height: 100%;
   position: relative;
+  background-color: #000;
   .search{
     position: absolute;
     right: 48px;

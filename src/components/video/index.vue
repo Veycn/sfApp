@@ -123,7 +123,6 @@ export default Vue.extend({
     },
 
     handleShare(){
-      console.log('11111');
       const {id, relayNum} = this.video
       API.updateRelay({
         courseId: id,

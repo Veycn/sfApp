@@ -1,9 +1,10 @@
 import Services from "./http";
 
 const API = {
-  getPrivateCourseList: () => {
+  getPrivateCourseList: (params) => {
     return Services.get({
-      url: '/api/recommendCourse/getPrivateCourseList'
+      url: '/api/recommendCourse/getPrivateCourseList',
+      params
     })
   },
   getVideoPlayInfo: (params) => {
@@ -38,9 +39,10 @@ const API = {
       params
     })
   },
-  getMyCourseList(){
+  getMyCourseList(params){
     return Services.get({
       url: 'api/userCourse/getMyCourseList',
+      params
     })
   },
   userLogin(params){
@@ -57,6 +59,23 @@ const API = {
   updateRelay(params){
     return Services.post({
       url: `api/userCourse/updateCourseRelayNum?courseId=${params.courseId}&relayNum=${params.relayNum}`,
+    })
+  },
+  getLiveCourse(params){
+    return Services.get({
+      url: `api/recommendCourse/getSimpleLiveCourse?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+    })
+  },
+  getMyLikeCourse(params){
+    return Services.get({
+      url: 'api/userCourse/getCourseStarListByUser',
+      params
+    })
+  },
+  getLiveDetail(params){
+    return Services.get({
+      url: 'api/recommendCourse/getLiveCourseInfo',
+      params
     })
   }
 };

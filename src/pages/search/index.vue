@@ -233,7 +233,7 @@ export default {
       });
     },
     toPlay(videoId, playId, sales, stars, poster) {
-      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${videoId}&sales=${sales}&stars=${stars}&poster=${poster}`})
+      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${playId}&sales=${sales}&stars=${stars}&poster=${poster}`})
     },
   },
   components: {

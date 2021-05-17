@@ -9,8 +9,8 @@
           activeTab === 'buy' ? 'active' : '',
         ]"
       >
-        <text class="iconfont"></text>
-        <text class="text">已购</text>
+        <text class="mr-10 iconfont icon-buy f-40"></text>
+        <text class="text mr-10">已购</text>
         <text class="number">128</text>
       </view>
       <view
@@ -20,13 +20,13 @@
           activeTab === 'like' ? 'active' : '',
         ]"
       >
-        <text class="iconfont"></text>
-        <text class="text">喜欢</text>
+        <text class="mr-10 iconfont icon-like f-32"></text>
+        <text class="text mr-10">喜欢</text>
         <text class="number">128</text>
       </view>
     </view>
     <view class="courses">
-      <template v-for="c in myBuys">
+      <template v-for="c in renderList">
         <course
           :title="c.courseName"
           :is-buy="true"
@@ -55,25 +55,64 @@ export default {
     return {
       activeTab: "buy",
       myBuys: [],
+      myLike: [],
+      buyPageNum: 0,
+      buyPageSize: 5,
+      buyTotal: 1,
+      likePageNum: 0,
+      likePageSize: 5,
+      likeTotal: 1
     };
   },
   created() {
-    this.getMyCourse();
+    this.getMyBuyCourse();
+    this.getMyLikeCourse();
   },
 
   methods: {
-    getMyCourse() {
-      API.getMyCourseList().then((res) => {
+    getMyBuyCourse() {
+      API.getMyCourseList({
+        pageNo: ++this.buyPageNum,
+        pageSize: this.buyPageSize
+      }).then((res) => {
         console.log(res);
-        this.myBuys = res?.data?.data || [];
+        this.myBuys = res?.data?.data?.list || [];
+        this.buyTotal = res?.data?.data?.total || 0;
       });
+    },
+    getMyLikeCourse(){
+      API.getMyLikeCourse({
+        pageNo: ++this.likePageNum,
+        pageSize: this.likePageSize
+      }).then(res => {
+        this.myLike = res?.data?.data?.list || []
+        this.likeTotal = res?.data?.data?.total || 0;
+      })
     },
     changeTab(tab) {
       this.activeTab = tab;
     },
     toPlay(videoId, playId, sales, stars, poster) {
-      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${videoId}&sales=${sales}&stars=${stars}&poster=${poster}`})
+      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${playId}&sales=${sales}&stars=${stars}&poster=${poster}`})
     },
+  },
+  reachBottom(){
+    if(this.activeTab === 'buy'){
+      this.getMyBuyCourse();
+    }else{
+      this.getMyLikeCourse();
+    }
+  },
+  computed: {
+    renderList(){
+      return this.activeTab === 'buy' ? this.myBuys : this.myLike
+    },
+    hasBuyNext(){
+      return this.myBuys.length < this.buyTotal
+    },
+    hasLikeNext(){
+      return this.myLike.length < this.likeTotal
+    }
   },
   components: {
     Course,
@@ -84,12 +123,15 @@ export default {
 <style lang="less">
 .index{
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background-color: #000;
 }
 .tab {
   height: 152px;
   background-color: #000;
+  position: sticky;
+  left: 0;
+  top: 0;
   .tab-item {
     position: relative;
     box-sizing: border-box;
@@ -103,6 +145,14 @@ export default {
       position: relative;
       top: 6px;
       left: 2px;
+    }
+    &.active{
+      .text{
+        color: #fff;
+      }
+      .number{
+        color: #fff;
+      }
     }
     &.active::after {
       content: "";
@@ -119,5 +169,6 @@ export default {
 
 .courses {
   padding: 25px;
+  background-color: #000;
 }
 </style>
