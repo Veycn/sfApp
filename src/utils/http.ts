@@ -17,7 +17,7 @@ const BASE = 'https://www.shenfu.online/sfeduWx/';
 const request = (url: string, params: object, method: Method=Method.GET, type?: string,) => {
   let contentType: string = "";
   const userToken = Taro.getStorageSync("userToken");
-  if (type === Method.POST) {
+  if (type === "form") {
     contentType = "application/x-www-form-urlencoded";
   } else {
     contentType = "application/json";

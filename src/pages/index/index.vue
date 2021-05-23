@@ -33,7 +33,7 @@
 import ChooseBoard from "../../components/chooseBoard/index.vue";
 import TipWindows from "../../components/tipWindows/index.vue";
 import Taro from "@tarojs/taro";
-import request from "../../utils/http";
+import API from "../../utils/api";
 
 const app = Taro.getApp();
 
@@ -95,11 +95,7 @@ export default {
           key: "choosedTitle",
           data: choosedTitle,
         });
-        const res = await request.post({
-          url: "api/userInfo/addUserInfo",
-          params: { ...this.getversion },
-          type: "form",
-        });
+        const res = await API.getCourseInfo({ ...this.getversion });
         if (res.data.status) {
           Taro.switchTab({ url: `../detect/index` });
         }
@@ -112,24 +108,15 @@ export default {
     },
 
     async getAllGrades() {
-      const res = await request.get({
-        url: "api/userInfo/getSubjectList",
-        params: {},
-      });
+      const res = await API.getAllGrades();
       this.allGrades = res.data.data;
     },
     async getSubjects(id) {
-      const res = await request.get({
-        url: "api/userInfo/getTextbookList",
-        params: { subjectId: id },
-      });
+      const res = await API.getSubjects({ subjectId: id });
       this.currentSubjects = res.data.data;
     },
     async getTextBooks(id) {
-      const res = await request.get({
-        url: "api/userInfo/getTextbookVersionList",
-        params: { textbookId: id },
-      });
+      const res = await API.getTextBooks({ textbookId: id });
       this.allVersion = res.data.data;
     },
     getUserInfo: function (e) {
