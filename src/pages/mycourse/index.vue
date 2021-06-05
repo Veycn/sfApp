@@ -11,7 +11,7 @@
       >
         <text class="mr-10 iconfont icon-buy f-40"></text>
         <text class="text mr-10">已购</text>
-        <text class="number">128</text>
+        <text class="number">{{buyTotal || 0}}</text>
       </view>
       <view
         @tap="changeTab('like')"
@@ -22,7 +22,7 @@
       >
         <text class="mr-10 iconfont icon-like f-32"></text>
         <text class="text mr-10">喜欢</text>
-        <text class="number">128</text>
+        <text class="number">{{likeTotal || 0}}</text>
       </view>
     </view>
     <view class="courses">
@@ -75,7 +75,6 @@ export default {
         pageNo: ++this.buyPageNum,
         pageSize: this.buyPageSize
       }).then((res) => {
-        console.log(res);
         this.myBuys = res?.data?.data?.list || [];
         this.buyTotal = res?.data?.data?.total || 0;
       });

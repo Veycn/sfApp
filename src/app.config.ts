@@ -14,6 +14,7 @@ export default {
     "pages/similar/index",
     "pages/search/index",
     "pages/play/index",
+    "pages/test/index",
   ],
   window: {
     backgroundTextStyle: "light",

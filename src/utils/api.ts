@@ -59,6 +59,8 @@ const API = {
   updateRelay(params){
     return Services.post({
       url: `api/userCourse/updateCourseRelayNum?courseId=${params.courseId}&relayNum=${params.relayNum}`,
+      params,
+      type: 'form'
     })
   },
   getLiveCourse(params){
@@ -75,7 +77,7 @@ const API = {
   getLiveDetail(params){
     return Services.get({
       url: 'api/recommendCourse/getLiveCourseInfo',
-      params
+      params,
     })
   }
 };
