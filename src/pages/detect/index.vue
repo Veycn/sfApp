@@ -64,7 +64,7 @@ export default {
   name: "Detect",
   data() {
     return {
-      subjectVersion: "数学七年级上人教版",
+      subjectVersion: "",
       chapters: [],
       list: [],
       seclist: [],

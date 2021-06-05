@@ -1,6 +1,30 @@
 import Services from "./http";
 
 const API = {
+  getAllGrades: () => {
+    return Services.get({
+      url: "api/userInfo/getSubjectList"
+    })
+  },
+  getSubjects: (params) => {
+    return Services.get({
+      url: "api/userInfo/getTextbookList",
+      params
+    })
+  },
+  getTextBooks: (params) => {
+    return Services.get({
+      url: "api/userInfo/getTextbookVersionList",
+      params
+    })
+  },
+  getCourseInfo: params => {
+    return Services.post({
+      url: "/api/userInfo/addUserInfo",
+      params,
+      type: "form"
+    })
+  },
   getPrivateCourseList: (params) => {
     return Services.get({
       url: '/api/recommendCourse/getPrivateCourseList',
