@@ -1,12 +1,29 @@
 <template>
-  <view class="container" :animation="modalAnimation">
-    <view class="content" :animation="btnAnimation">
-      <view class="exit" @tap="onClose">
+  <view
+    class="container"
+    :animation="modalAnimation"
+  >
+    <view
+      class="content"
+      :animation="btnAnimation"
+    >
+      <view
+        class="exit"
+        @tap="onClose"
+      >
         答题卡
-        <image class="img" src="https://www.shenfu.online/pic/icon/exit_pic.png" />
+        <image
+          class="img"
+          src="https://www.shenfu.online/pic/icon/exit_pic.png"
+        />
       </view>
       <slot name="scantron" />
-      <view class="tip" @tap="watchResult">交卷并查看结果</view>
+      <view
+        class="tip"
+        @tap="watchResult"
+      >
+        交卷并查看结果
+      </view>
     </view>
   </view>
 </template>
@@ -14,6 +31,10 @@
 <script lang="ts">
 import Taro from "@tarojs/taro";
 export default {
+  props: {
+    isSubmit: Function,
+    hideAnswerCard: Function
+  },
   data() {
     return {
       btnAnimation: "",
@@ -41,12 +62,12 @@ export default {
       this.hBtnAnimation();
       this.hModalAnimation();
       setTimeout(() => {
-        Taro.eventCenter.trigger("hideAnswerCard");
+        this.hideAnswerCard && this.hideAnswerCard();
       }, 300);
     },
     // 提交并查看结果
     watchResult() {
-      Taro.eventCenter.trigger("isSubmit");
+      this.isSubmit && this.isSubmit();
     },
   },
 };

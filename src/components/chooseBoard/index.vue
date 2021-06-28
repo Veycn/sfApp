@@ -1,23 +1,39 @@
 <template>
   <view class="wrapper">
-    <view class="tag"></view>
+    <view class="tag" />
     <view class="title">
-      <text class="text">{{ tagName }}</text>
+      <text class="text">
+        {{ tagName }}
+      </text>
     </view>
     <view class="content">
-      <block v-for="(item, index) in renderList" :key="index">
+      <block
+        v-for="(item, index) in renderList"
+        :key="index"
+      >
         <view
           class="c-item"
-          @tap="itemChoosed"
           :style="{ background: activeIndex === index ? '#15DA7F' : 'transparent' }"
           :data-item="item"
           :data-index="index"
-          >{{ item[type] }}</view
+          @tap="itemChoosed"
         >
+          {{ item[type] }}
+        </view>
       </block>
       <block v-if="type === 'grade'">
-        <view class="item" @tap="showTip">高二</view>
-        <view class="item" @tap="showTip">高三</view>
+        <view
+          class="item"
+          @tap="showTip"
+        >
+          高二
+        </view>
+        <view
+          class="item"
+          @tap="showTip"
+        >
+          高三
+        </view>
       </block>
     </view>
   </view>
@@ -26,22 +42,23 @@
 <script lang="ts">
 import Taro from "@tarojs/taro";
 export default {
-  data() {
-    return {
-      activeIndex: -1,
-    };
-  },
   props: {
     tagName: String,
     renderList: Array,
     type: String,
     activeColor: String,
+    tagBeChoosed: Function
+  },
+  data() {
+    return {
+      activeIndex: -1,
+    };
   },
   methods: {
     itemChoosed(e) {
       const { item, index } = e.target.dataset;
       this.activeIndex = index;
-      Taro.eventCenter.trigger("tagBeChoosed", { item, index });
+      this.tagBeChoosed && this.tagBeChoosed({ item, index });
     },
     showTip() {
       Taro.showToast({

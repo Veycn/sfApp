@@ -1,6 +1,6 @@
 <template>
   <view class="p-container">
-    <official-account></official-account>
+    <official-account />
     <swiper
       class="swiper"
       :indicator-dots="indicatorDots"
@@ -8,27 +8,45 @@
       :interval="interval"
       :duration="duration"
     >
-      <swiper-item v-for="(item, index) in background" :key="index">
-        <view :data-url="item" @tap="skip" class="swiper-item">
-          <image class="lbt" :src="item" />
+      <swiper-item
+        v-for="(item, index) in background"
+        :key="index"
+      >
+        <view
+          :data-url="item"
+          class="swiper-item"
+          @tap="skip"
+        >
+          <image
+            class="lbt"
+            :src="item"
+          />
         </view>
       </swiper-item>
     </swiper>
     <view class="header">
       <view class="chapter">
-        <image class="img" src="https://www.shenfu.online/pic/Image.png" />
+        <image
+          class="img"
+          src="https://www.shenfu.online/pic/Image.png"
+        />
         <view class="txt">
           {{ subjectVersion }}
           <image
             class="down"
-            @tap="reselect"
             src="https://www.shenfu.online/pic/down.png"
+            @tap="reselect"
           />
         </view>
-        <view class="tip">欢迎使用深辅智能在线教育</view>
+        <view class="tip">
+          欢迎使用深辅智能在线教育
+        </view>
       </view>
       <view class="detect-scroll">
-        <scroll-view class="detect-scroller" scroll-x="true">
+        <scroll-view
+          class="detect-scroller"
+          scroll-x="true"
+        >
           <template v-for="(item, index) in chapters">
             <view
               :key="index"
@@ -45,9 +63,15 @@
       </view>
     </view>
     <view class="section-list">
-      <block v-for="(item, index) in seclist" :key="index">
+      <block
+        v-for="(item, index) in seclist"
+        :key="index"
+      >
         <view class="sec-wraps">
-          <section-list :seclist="item" :first="index" />
+          <section-list
+            :seclist="item"
+            :first="index"
+          />
         </view>
       </block>
     </view>
@@ -62,9 +86,12 @@ const app = Taro.getApp();
 
 export default {
   name: "Detect",
+  components: {
+    SectionList,
+  },
   data() {
     return {
-      subjectVersion: "",
+      subjectVersion: "数学必修一人教A版",
       chapters: [],
       list: [],
       seclist: [],
@@ -216,9 +243,6 @@ export default {
         },
       });
     },
-  },
-  components: {
-    SectionList,
   },
 };
 </script>

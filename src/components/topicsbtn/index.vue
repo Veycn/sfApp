@@ -1,39 +1,42 @@
 <template>
-  <scroll-view scroll-y="true" class="btn-container">
-    <block v-for="(item, index) in scantronList" :key="index">
+  <scroll-view
+    scroll-y="true"
+    class="btn-container"
+  >
+    <block
+      v-for="(item, index) in scantronList"
+      :key="index"
+    >
       <view
-        @tap="rediretTopic"
         :data-index="index"
         :class="['default', isFinshed[index] > -1 ? 'active' : 'init']"
-        >{{ index + 1 }}</view
+        @tap="rediretTopic"
       >
+        {{ index + 1 }}
+      </view>
     </block>
   </scroll-view>
 </template>
 
 <script lang="ts">
-import Taro from '@tarojs/taro';
 export default {
   props: {
     scantronList: Array,
-    isFinshed:Array,
+    isFinshed: Array,
     submitAnswer: Object,
     isK: Boolean,
-    spendTime: Number
+    spendTime: Number,
+    hideAnswerCard: Function,
   },
   methods: {
     rediretTopic(e) {
       let currentIndex = e.target.dataset.index;
-      Taro.eventCenter.trigger("rediretTopic", { currentIndex });
+      this.hideAnswerCard && this.hideAnswerCard({ currentIndex });
     },
     onClose() {
       setTimeout(() => {
-        Taro.eventCenter.trigger("hideAnswerCard");
+        this.hideAnswerCard && this.hideAnswerCard();
       }, 300);
-    },
-    // 提交并查看结果
-    watchResult() {
-      Taro.eventCenter.trigger("isSubmit");
     },
   },
 };
