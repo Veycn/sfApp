@@ -1,20 +1,30 @@
 <template>
   <view class="t-container">
     <view class="t-wrap">
-      <view class="tip-logo" @tap="exitModal"
-        ><image mode="widthFix" src="https://www.shenfu.online/pic/icon/exit2.png"></image
-      ></view>
-      <view class="tip-text">* 需要选中科目、教材和版本</view>
+      <view
+        class="tip-logo"
+        @tap="handleExitModal"
+      >
+        <image
+          mode="widthFix"
+          src="https://www.shenfu.online/pic/icon/exit2.png"
+        />
+      </view>
+      <view class="tip-text">
+        * 需要选中科目、教材和版本
+      </view>
     </view>
   </view>
 </template>
 
 <script lang="ts">
-import Taro from "@tarojs/taro";
 export default {
+  props: {
+    exitModal: Function
+  },
   methods: {
-    exitModal() {
-      Taro.eventCenter.trigger("exitModal");
+    handleExitModal() {
+      this.exitModal && this.exitModal();
     },
   },
 };

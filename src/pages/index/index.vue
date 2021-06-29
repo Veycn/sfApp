@@ -1,29 +1,38 @@
 <template>
   <view class="p-container">
-    <scroll-view class="scroll-wrap" scroll-y="true">
+    <scroll-view
+      class="scroll-wrap"
+      scroll-y="true"
+    >
       <choose-board
         tag-name="科目"
         :render-list="allGrades"
         type="subject"
-        @tagBeChoosed="gradeChoosed"
-      ></choose-board>
+        :tag-be-choosed="handleChoosed"
+      />
       <choose-board
         tag-name="教材"
         :render-list="currentSubjects"
         type="textbook"
-        @tagBeChoosed="subjectChoosed"
-      ></choose-board>
+        :tag-be-choosed="handleChoosed"
+      />
       <choose-board
         tag-name="版本"
         :render-list="allVersion"
         type="textbookVersion"
-        @tagBeChoosed="versionChoosed"
-      ></choose-board>
-      <view class="to-learn" @tap="startStudy">
-        <image class="pic" src="https://www.shenfu.online/pic/icon_open.png" />
+        :tag-be-choosed="handleChoosed"
+      />
+      <view
+        class="to-learn"
+        @tap="startStudy"
+      >
+        <image
+          class="pic"
+          src="https://www.shenfu.online/pic/icon_open.png"
+        />
       </view>
       <block v-if="isChoosed">
-        <tip-windows @exitModal="exitModal" />
+        <tip-windows :exit-modal="exitModal" />
       </block>
     </scroll-view>
   </view>
@@ -39,6 +48,10 @@ const app = Taro.getApp();
 
 export default {
   name: "Index",
+  components: {
+    ChooseBoard,
+    TipWindows,
+  },
   data() {
     return {
       code: "",
@@ -59,7 +72,6 @@ export default {
       hasUserInfo: false,
       canIUse: Taro.canIUse("button.open-type.getUserInfo"),
       userInfo: {},
-      isChoosed: false,
       choosedSubject: "",
       choosedBook: "",
       choosedVersion: "",
@@ -67,8 +79,9 @@ export default {
   },
   onLoad: function (options) {
     this.getAllGrades();
-    Taro.eventCenter.on("exitModal", this.exitModal);
-    Taro.eventCenter.on("tagBeChoosed", (e) => {
+  },
+  methods: {
+    handleChoosed(e) {
       const type = Object.keys(e.item)[1];
       switch (type) {
         case "subject":
@@ -83,9 +96,7 @@ export default {
         default:
           break;
       }
-    });
-  },
-  methods: {
+    },
     async startStudy() {
       if (this.isStartStudy) {
         const choosedTitle =
@@ -127,14 +138,8 @@ export default {
 
     userLogin: function () {
       const { code } = this.data;
-      const {
-        nickName,
-        gender,
-        city,
-        province,
-        country,
-        avatarUrl,
-      } = this.userInfo;
+      const { nickName, gender, city, province, country, avatarUrl } =
+        this.userInfo;
       request(
         "api/userAccount/login",
         "post",
@@ -173,10 +178,6 @@ export default {
       this.getversion.textbookVersionId = id;
       this.isStartStudy = true;
     },
-  },
-  components: {
-    ChooseBoard,
-    TipWindows,
   },
 };
 </script>

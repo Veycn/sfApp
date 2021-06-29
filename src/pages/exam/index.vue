@@ -1,13 +1,16 @@
 <template>
   <view class="clock-container">
     <block v-if="isShowAnswerCard">
-      <answer-card @hideAnswerCard="hideAnswerCard" @isSubmit="isSubmited">
+      <answer-card
+        :is-submit="isSubmited"
+        :hide-answer-card="hideAnswerCard"
+      >
         <topics-btn
           slot="scantron"
-          @rediretTopic="rediretTopic"
-          @hideAnswerCard="hideAnswerCard"
-          :isFinshed="userAnswers"
+          :is-finshed="userAnswers"
           :scantron-list="topicsList"
+          :rediret-topic="rediretTopic"
+          :hide-answer-card="hideAnswerCard"
         />
       </answer-card>
     </block>
@@ -15,32 +18,56 @@
       <view class="clock-list">
         <view :class="['timer', type == 'isKnowledge' ? 'hide' : '']">
           <view class="item-one">
-            <image class="img" mode="widthFix" :src="szimg" />
-            <text class="item-text">{{ minutes }}:{{ seconds }}</text>
+            <image
+              class="img"
+              mode="widthFix"
+              :src="szimg"
+            />
+            {{ minutes }}:{{ seconds }}
           </view>
         </view>
-        <view class="answer-card" @tap="showAnswerCard">答题卡/提交</view>
+        <view
+          class="answer-card"
+          @tap="showAnswerCard"
+        >
+          答题卡/提交
+        </view>
         <view>{{ topicsList.length }}/{{ currentTopicIndex + 1 }}</view>
       </view>
     </view>
 
     <view class="topic-wrap">
-      <swiper @change="nextTopic" :current="currentTopicIndex">
-        <block v-for="(item, index) in topicsList" :key="index">
+      <swiper
+        :current="currentTopicIndex"
+        @change="nextTopic"
+      >
+        <block
+          v-for="(item, index) in topicsList"
+          :key="index"
+        >
           <swiper-item>
             <view>
               <view class="topic-img">
-                <image mode="widthFix" :src="item.url" />
+                <image
+                  mode="widthFix"
+                  :src="item.url"
+                />
               </view>
               <view class="quetype">
                 <view class="quetype-con">
-                  <view class="item"
-                    ><image mode="widthFix" :src="tyimg" />单选题</view
-                  >
+                  <view class="item">
+                    <image
+                      mode="widthFix"
+                      :src="tyimg"
+                    />单选题
+                  </view>
                 </view>
               </view>
               <view class="btn-wrap">
-                <block v-for="(item, index) in answerLists" :key="index">
+                <block
+                  v-for="(item, index) in answerLists"
+                  :key="index"
+                >
                   <view
                     v-if="type === 'isKnowledge'"
                     :class="[
@@ -50,15 +77,16 @@
                     ]"
                     :data-index="index"
                     @tap="getUserAnswer"
-                    >{{
+                  >
+                    {{
                       choosedTopicIndex === index &&
-                      topicsList[currentTopicIndex]["userAnswer"] ===
+                        topicsList[currentTopicIndex]["userAnswer"] ===
                         index + 1 &&
-                      topicsList[currentTopicIndex]["judgeResult"] === 1
+                        topicsList[currentTopicIndex]["judgeResult"] === 1
                         ? "✔"
                         : item
-                    }}</view
-                  >
+                    }}
+                  </view>
 
                   <view
                     v-else
@@ -79,10 +107,12 @@
       </swiper>
     </view>
     <view class="footer">
-      <view class="tip-b">点击答题卡可提交已测试题目</view>
-      <view class="tip-s"
-        >如果著作权人发现，请第一时间通知我们，我们马上删除。</view
-      >
+      <view class="tip-b">
+        点击答题卡可提交已测试题目
+      </view>
+      <view class="tip-s">
+        如果著作权人发现，请第一时间通知我们，我们马上删除。
+      </view>
     </view>
   </view>
 </template>
@@ -98,6 +128,10 @@ import TopicsBtn from "../../components/topicsbtn/index.vue";
 import AnswerCard from "../../components/answercard/index.vue";
 
 export default {
+  components: {
+    TopicsBtn,
+    AnswerCard,
+  },
   props: {
     currentSubjects: {
       type: Array,
@@ -110,9 +144,9 @@ export default {
   },
   data() {
     return {
-      szimg: 'https://www.shenfu.online/pic/icon/clock.png',
-      tyimg: 'https://www.shenfu.online/pic/icon/icon_circle.png',
-      psimg: 'https://www.shenfu.online/pic/icon/icon_poss.png',
+      szimg: "https://www.shenfu.online/pic/icon/clock.png",
+      tyimg: "https://www.shenfu.online/pic/icon/icon_circle.png",
+      psimg: "https://www.shenfu.online/pic/icon/icon_poss.png",
       minutes: "00",
       seconds: "00",
       timer: null, // 倒计时 器
@@ -154,9 +188,6 @@ export default {
   },
 
   onLoad: function (options) {
-    Taro.eventCenter.on("hideAnswerCard", this.hideAnswerCard);
-    Taro.eventCenter.on("rediretTopic", this.rediretTopic);
-    Taro.eventCenter.on("isSubmit", this.isSubmited);
     if (options.isKnowledge) {
       this.type = "isKnowledge";
       this.examId = options.examId;
@@ -170,30 +201,30 @@ export default {
       this.autoSave();
     }
   },
-  onUnload: function () {
+  beforeDestroy: function () {
+    clearInterval(this.stimer);
     if (this.isKnowledge !== "isKnowledge") {
-      clearInterval(this.stimer);
       this.clearTimer();
       this.clearForTimer();
-      if (!this.submited) {
-        console.log("页面卸载时保存");
+      if(!this.submited) {
         this.saveAns();
+
       }
     }
   },
   methods: {
-    init: function () {
+    init() {
       this.minutes = "00";
       this.second = "00";
     },
     // 清除倒计时的计时器
-    clearTimer: function () {
+    clearTimer() {
       clearInterval(this.timer);
       this.time = null;
       this.init();
     },
     // 清除正向计时器
-    clearForTimer: function () {
+    clearForTimer() {
       clearInterval(this.forwardtimer);
       this.forwardtimer = null;
       this.init();
@@ -206,22 +237,17 @@ export default {
         var str = this.conversion(forwardtime).split(":");
         this.minutes = str[0];
         this.seconds = str[1];
-        if (this.isSubmit) {
-          this.isSubmit = false;
-          this.submited = true;
-          this.spendAllTime();
-        }
       }, 1000);
       this.forwardtimer = forwardtimer;
     },
-    countDown: function (duration) {
+    countDown(duration) {
       if (duration <= 0) {
         this.clearTimer();
         this.forwardCount();
       }
       return this.conversion(duration);
     },
-    conversion: function (time) {
+    conversion(time) {
       var seconds = this._format(time % 60);
       var minutes =
         Math.floor(time / 60) < 10
@@ -229,10 +255,10 @@ export default {
           : Math.floor(time / 60);
       return `${minutes}:${seconds}`;
     },
-    _format: function (time) {
+    _format(time) {
       return time >= 10 ? time : `0${time}`;
     },
-    runCountDown: function (initDuration) {
+    runCountDown(initDuration) {
       console.log(`总时间为${initDuration}`);
       var timer = setInterval(() => {
         var totalseconds = initDuration;
@@ -243,20 +269,24 @@ export default {
         var str = this.countDown(totalseconds).split(":");
         this.minutes = str[0];
         this.seconds = str[1];
-        // 判断是否提交，如果提交计算做题花费总时间
-        if (this.isSubmit) {
-          this.isSubmit = false;
-          this.submited = true;
-          this.spendAllTime();
-        }
       }, 1000);
       this.timer = timer;
     },
-    saveAns() {
-      let sign = "save";
-      console.log(`倒计时时间${this.examSectionTemp.timeSecond}`);
+    async saveAns() {
+      console.log(`saveAns 倒计时时间${this.examSectionTemp.timeSecond}`);
       this.examSectionTemp.dealType = 1;
-      this.subOrSaveReq(sign);
+      let url = "";
+      let data = {};
+      this.getDoneQue();
+
+      if (this.type === "isKnowledge") {
+        url = "/api/exam/dealKnowledgeExam";
+        data = this.examKnowledgeTemp;
+      } else {
+        url = "/api/exam/dealSectionExam";
+        data = this.examSectionTemp;
+      }
+      await request.post({ url, params: { ...data } });
     },
     autoSave() {
       let stimer = setInterval(() => {
@@ -294,71 +324,8 @@ export default {
         this.examSectionTemp.examItemTempList = doneArr;
       }
     },
-    async subOrSaveReq(sign = "submit") {
-      if (sign === "submit") {
-        Taro.showLoading({
-          title: "加载中...",
-          icon: "none",
-        });
-      }
-      let url = "";
-      let data = {};
-      this.getDoneQue();
-
-      if (this.type === "isKnowledge") {
-        url = "/api/exam/dealKnowledgeExam";
-        data = this.examKnowledgeTemp;
-      } else {
-        url = "/api/exam/dealSectionExam";
-        data = this.examSectionTemp;
-      }
-      const res = await request.post({
-        url,
-        params: { ...data },
-      });
-      if (res.data.status === 200) {
-        if (sign === "submit") {
-          if (this.type === "isKnowledge") {
-            Taro.hideLoading();
-            this.type = "";
-            let pages = getCurrentPages();
-            let prevPage = pages[pages.length - 2];
-            prevPage.setData({
-              examId: this.examId,
-            });
-            prevPage.getList(prevPage.data.examId);
-            Taro.navigateBack({
-              delta: 1,
-            });
-          } else {
-            Taro.hideLoading();
-            Taro.reLaunch({
-              url: `/pages/detectResult/index?data=${JSON.stringify(
-                res.data.data
-              )}`,
-            });
-          }
-        }
-      }
-    },
-    spendAllTime() {
-      if (this.type === "isKnowledge") {
-        // console.log(`${this.examKnowledgeTemp.timeWay}计时,倒计时总时间为${this.examKnowledgeTemp.timeSecond}s`)
-        // this.setData({
-        //   ['examKnowledgeTemp.dealType']: 2
-        // })
-        // console.log(this.examKnowledgeTemp)
-      } else {
-        console.log(
-          `${this.examSectionTemp.timeWay}计时,倒计时总时间为${this.examSectionTemp.timeSecond}s`
-        );
-        this.examSectionTemp.dealType = 2;
-      }
-      this.subOrSaveReq();
-    },
     // 得到用户的答案
     getUserAnswer(e) {
-      // this.isMakeAllTopic()
       let userAnswers = this.userAnswers;
       let choosedTopicIndex = e.target.dataset.index;
       this.choosedTopicIndex = choosedTopicIndex;
@@ -380,8 +347,48 @@ export default {
         this.currentTopicIndex = currentTopicIndex;
       }, 300);
     },
-    isSubmited() {
-      this.isSubmit = true;
+    async isSubmited() {
+      clearInterval(this.stimer);
+      this.submited = true;
+      Taro.showLoading({
+        title: "加载中...",
+        icon: "none",
+      });
+      let url = "";
+      let data = {};
+      this.getDoneQue();
+
+      this.examSectionTemp.dealType = 2;
+      if (this.type === "isKnowledge") {
+        url = "/api/exam/dealKnowledgeExam";
+        data = this.examKnowledgeTemp;
+      } else {
+        url = "/api/exam/dealSectionExam";
+        data = this.examSectionTemp;
+      }
+      const res = await request.post({ url, params: { ...data } });
+      if (res.data.status === 200) {
+        if (this.type === "isKnowledge") {
+          Taro.hideLoading();
+          this.type = "";
+          let pages = getCurrentPages();
+          let prevPage = pages[pages.length - 2];
+          prevPage.setData({
+            examId: this.examId,
+          });
+          prevPage.getList(prevPage.data.examId);
+          Taro.navigateBack({
+            delta: 1,
+          });
+        } else {
+          Taro.hideLoading();
+          Taro.reLaunch({
+            url: `/pages/detectResult/index?data=${JSON.stringify(
+              res.data.data
+            )}`,
+          });
+        }
+      }
     },
     // 提交答案
     submitUserAnswer() {
@@ -493,10 +500,6 @@ export default {
         }
       }
     },
-  },
-  components: {
-    TopicsBtn,
-    AnswerCard,
   },
 };
 </script>
@@ -618,19 +621,15 @@ export default {
 }
 .img {
   width: 34px;
+  margin-right: 8px;
 }
 .item-one {
   width: 120px;
   line-height: 34px;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
-.item-text {
-  width: 57px;
-  line-height: 34px;
-  margin-left: 8px;
-}
-
 .quetype {
   width: 100%;
   height: 80px;

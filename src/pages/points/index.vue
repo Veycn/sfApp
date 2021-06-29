@@ -1,21 +1,28 @@
 <template>
   <view class="p-wrapper">
     <view class="banner">
-      <image class="bg" src="https://www.shenfu.online/pic/jhbg.png" />
-      <text class="c">{{ sectionName }}</text>
-      <text class="s">欢迎使用深辅智能在线教育</text>
+      <image
+        class="bg"
+        src="https://www.shenfu.online/pic/jhbg.png"
+      />
+      <text class="c">
+        {{ sectionName }}
+      </text>
+      <text class="s">
+        欢迎使用深辅智能在线教育
+      </text>
     </view>
     <view class="points">
       <template v-for="(item, index) in renderList">
         <view :key="index">
           <point-item
+            :id="item['id']"
             :point-name="item['knowledgePoint']"
             :right-list="item['rightList']"
             :status="item['text']"
             :color="item['color']"
             :level="item['level']"
-            @pointTap="toQuestion"
-            :id="item['id']"
+            :point-tap="toQuestion"
           />
         </view>
       </template>
@@ -23,10 +30,12 @@
     <view class="btn-wrapper">
       <image
         class="btn"
-        @tap="customize"
         src="https://www.shenfu.online/pic/btn_curriculum.png"
+        @tap="customize"
       />
-      <text class="txt">深辅AI智能精选课程</text>
+      <text class="txt">
+        深辅AI智能精选课程
+      </text>
     </view>
   </view>
 </template>
@@ -39,6 +48,9 @@ const app = Taro.getApp();
 
 export default {
   name: "Points",
+  components: {
+    pointItem,
+  },
   data() {
     return {
       sectionName: "",
@@ -50,7 +62,6 @@ export default {
   onLoad: async function (options) {
     let { examId } = options;
     this.getList(examId);
-    Taro.eventCenter.on('pointTap', this.toQuestion);
   },
   onShow() {},
   methods: {
@@ -99,9 +110,6 @@ export default {
     customize() {
       Taro.switchTab({ url: "/pages/customize/index" });
     },
-  },
-  components: {
-    pointItem,
   },
 };
 </script>

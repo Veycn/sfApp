@@ -2,12 +2,12 @@
   <view class="p-wrapper">
     <view class="drw">
       <detect-result
-        :resultArr="resultArr"
+        :result-arr="resultArr"
         :point-number="4"
         :title-list="titleList"
         class="dr"
       />
-      <view class="line"></view>
+      <view class="line" />
     </view>
     <view class="recommand">
       <image
@@ -16,7 +16,12 @@
         mode="widthFix"
         @tap="toCourse"
       />
-      <view class="exit" @tap="exit">退 出</view>
+      <view
+        class="exit"
+        @tap="exit"
+      >
+        退 出
+      </view>
     </view>
   </view>
 </template>
@@ -27,6 +32,9 @@ import Taro from "@tarojs/taro";
 
 export default {
   name: "Detect",
+  components: {
+    DetectResult,
+  },
   data() {
     return {
       titleList: [
@@ -58,9 +66,6 @@ export default {
     toCourse() {
       Taro.switchTab({ url: "/pages/customize/index" });
     },
-  },
-  components: {
-    DetectResult,
   },
 };
 </script>

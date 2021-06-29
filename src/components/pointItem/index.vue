@@ -1,54 +1,64 @@
 <template>
-  <view class="point-wrapper" @tap="onTap">
-    <view class="tag" :style="{ background: color }"></view>
+  <view
+    class="point-wrapper"
+    @tap="onTap"
+  >
+    <view
+      class="tag"
+      :style="{ background: color }"
+    />
     <view class="head">
-      <text class="title">{{ pointName }}</text>
-      <text class="status">{{ status }}</text>
+      <text class="title">
+        {{ pointName }}
+      </text>
+      <text class="status">
+        {{ status }}
+      </text>
     </view>
     <view class="process">
       <block v-if="level === 0">
-        <view class="s-default"></view>
-        <view class="s-default"></view>
-        <view class="s-default"></view>
+        <view class="s-default" />
+        <view class="s-default" />
+        <view class="s-default" />
       </block>
       <block v-else-if="level === 1">
-        <view class="s-active"></view>
-        <view class="s-default"></view>
-        <view class="s-default"></view>
+        <view class="s-active" />
+        <view class="s-default" />
+        <view class="s-default" />
       </block>
       <block v-else-if="level === 2">
-        <view class="s-active"></view>
-        <view class="s-active"></view>
-        <view class="s-default"></view>
+        <view class="s-active" />
+        <view class="s-active" />
+        <view class="s-default" />
       </block>
       <block v-else>
-        <view class="s-active"></view>
-        <view class="s-active"></view>
-        <view class="s-active"></view>
+        <view class="s-active" />
+        <view class="s-active" />
+        <view class="s-active" />
       </block>
     </view>
   </view>
 </template>
 
 <script lang="ts">
-import Taro from '@tarojs/taro';
 export default {
-  data() {
-    return {
-      listNum: ["", "", ""],
-    };
-  },
   props: {
     pointName: String,
     status: String,
     color: String,
     level: Number,
     rightList: Array,
-    id: Number
+    id: Number,
+    pointTap: Function
+  },
+  data() {
+    return {
+      listNum: ["", "", ""],
+    };
   },
   methods: {
     onTap() {
-      Taro.eventCenter.trigger("pointTap", {id: this.$props.id});
+      this.pointTap && this.pointTap({id: this.$props.id});
     },
   },
 };
