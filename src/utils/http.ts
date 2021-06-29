@@ -14,7 +14,7 @@ enum Method{
 
 const BASE = 'https://www.shenfu.online/sfeduWx/';
 
-const request = (url: string, params: object, method: Method=Method.GET, type?: string,) => {
+const request = (url: string, params: object, method: Method = Method.GET, type?: string,) => {
   let contentType: string = "";
   const userToken = Taro.getStorageSync("userToken");
   if (type === 'form') {
@@ -29,6 +29,9 @@ const request = (url: string, params: object, method: Method=Method.GET, type?: 
     header: {
       "content-type": contentType,
       token: userToken
+    },
+    complete: () => {
+      
     }
   });
 };

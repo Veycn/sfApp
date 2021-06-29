@@ -7,7 +7,7 @@
         <text class="sig">元</text>
       </view>
     </view>
-    <view class="info flex f-fd-r f-ai-c f-jc-fs">
+    <view class="info flex f-fd-r f-ai-c f-jc-fs" v-if="showInfo">
       <view class="info-item flex f-fd-r f-ai-c">
         <text class="iconfont icon-share f-40"></text>
         <text class="text ml-10">{{relay || 0}}</text>
@@ -65,7 +65,11 @@ export default {
       value:false
     }, // 是否购买过
     poster: String,
-    handleTap: Function
+    handleTap: Function,
+    showInfo: {
+      type: Boolean,
+      default: true
+    }
   },
   data(){
     return {}
@@ -90,7 +94,7 @@ export default {
 <style lang="less">
 .course{
   margin: 10px 26px;
-  padding: 46px 40px;
+  padding: 20px 40px;
   background-color: #2d2d2d;
   color: #fff;
   .header{

@@ -14,7 +14,7 @@ export default {
     "pages/similar/index",
     "pages/search/index",
     "pages/play/index",
-    "pages/test/index",
+    "pages/slide/index"
   ],
   window: {
     backgroundTextStyle: "light",
@@ -26,31 +26,31 @@ export default {
     list: [
       {
         pagePath: "pages/customize/index",
-        text: "定制课程",
-        iconPath: "assets/icon/b.png",
-        selectedIconPath: "assets/icon/b_active.png"
+        text: "首页",
+        iconPath: "assets/tab/ic_home.png",
+        selectedIconPath: "assets/tab/ic_home_a.png"
       },
       {
         pagePath: "pages/live/index",
         text: "直播课",
-        iconPath: "assets/icon/a.png",
-        selectedIconPath: "assets/icon/a_active.png"
+        iconPath: "assets/tab/ic_live.png",
+        selectedIconPath: "assets/tab/ic_live_a.png"
       },
       {
         pagePath: "pages/detect/index",
-        text: "认知检测",
-        iconPath: "assets/icon/a.png",
-        selectedIconPath: "assets/icon/a_active.png"
+        text: "检测",
+        iconPath: "assets/tab/ic_check.png",
+        selectedIconPath: "assets/tab/ic_check_a.png"
       },
       {
         pagePath: "pages/mycourse/index",
-        text: "我的课程",
+        text: "课程",
         iconPath: "assets/icon/c.png",
         selectedIconPath: "assets/icon/c_active.png"
       },
       {
         pagePath: "pages/user/index",
-        text: "个人中心",
+        text: "我的",
         iconPath: "assets/icon/c.png",
         selectedIconPath: "assets/icon/c_active.png"
       }

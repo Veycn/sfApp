@@ -22,7 +22,8 @@
       </view>
     </view>
     <view class="video">
-      <video-play :video="video" :full="full"></video-play>
+      <!-- <video-play :video="video" :full="full" :is-play="isPlay"></video-play> -->
+      <image :src="video.courseCoverUrl" class="course-cover"></image>
     </view>
     <view class="video-info">
       <view class="teacher-info flex f-ai-c">
@@ -34,19 +35,9 @@
       </view>
       <view class="base-info">
         <view class="video-desc">
-          <!-- <view class="title">课程介绍</view> -->
           <view class="introduction">{{video.courseIntro}}</view>
         </view>
-        <!-- <view class="buy-info flex f-fd-r f-ai-b">
-          <view class="buy-btn" @tap="buyCourse">购买课程</view>
-          <view class="buy-price">
-            <text class="price">{{this.currency(video.coursePrice)}}</text>
-            <text class="yuan">元</text>
-          </view>
-          <view class="buy-users">{{video.courseSales}} | 已购</view>
-        </view> -->
       </view>
-      
     </view>
   </view>
 </template>
@@ -65,7 +56,11 @@ export default Vue.extend({
       type: Object,
       default: () => {}
     },
-    requestFull: Function
+    requestFull: Function,
+    isPlay: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -76,7 +71,6 @@ export default Vue.extend({
   },
   created(){
     this.getIsStar()
-    console.log(this);
   },
   methods: {
     buyCourse(){
@@ -112,10 +106,10 @@ export default Vue.extend({
 
     handleLike() {
       // const videoId = this.videoId;
-      const {id, courseStars} = this.video;
+      const { id } = this.video;
       API.starCourse({
         courseId: id,
-        courseStars
+        type: this.isStar ? 0 : 1
       }).then(res => {
         console.log(res);
         this.isStar = true
@@ -191,9 +185,18 @@ export default Vue.extend({
     }
   }
   .video {
+    width: 100%;
+    height: 100%;
+    position: relative;
     .context {
       min-width: 750px;
       min-height: 514px;
+    }
+    .course-cover{
+      width: 750px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
   .video-info{

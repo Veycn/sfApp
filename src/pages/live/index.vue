@@ -14,7 +14,7 @@
       </swiper-item>
     </swiper>
     <view class="live-wrapper">
-      <view class="live-course" v-for="c in renderList" @tap="toPlay(c)">
+      <view class="live-course" v-for="c in renderList" :key="c.courseName" @tap="toPlay(c)">
         <view class="live-header flex f-jc-sb f-ai-c">
           <view class="live-title c-fff f-30">{{ c.courseName }}</view>
           <view class="live-price">
@@ -48,6 +48,10 @@
           <view class="btn-buy f-24" v-else>购买</view>
         </view>
       </view>
+      <view class="loading" v-show="loading">加载中...</view>
+    </view>
+    <view class="no-course" v-if="hasReady && !renderList.length">
+      <text>请去检测页面做题，以便系统根据您的知识弱项推荐定制化直播课</text>
     </view>
   </view>
 </template>
@@ -70,7 +74,9 @@ export default {
         "https://www.shenfu.online/pic/pic1.png",
         "https://www.shenfu.online/pic/pic2.png",
       ],
-      renderList: []
+      renderList: [],
+      loading: false,
+      hasReady: false
     };
   },
   onLoad: function (options) {
@@ -78,19 +84,22 @@ export default {
   },
   methods: {
     getCourse(){
+      this.loading = true
       API.getLiveCourse({
         pageSize: this.pageSize,
         pageNum: ++this.pageNum
       }).then(res => {
         this.renderList = this.renderList.concat(res?.data?.data?.data?.list || [])
         this.total = res?.data?.data?.data?.total || 0
+        this.loading = false
+        this.hasReady = true
       })
     },
     skip(e) {
       console.log(e.currentTarget.dataset.url);
     },
-    toPlay(course) {
-      Taro.navigateTo({url: `/pages/play/index?source=${2}&courseId=${course.courseId}`})
+    toPlay({courseId, courseStars, courseSales, poster, relayNum, coursePrice}) {
+      Taro.navigateTo({url: `/pages/play/index?source=${2}&courseId=${courseId}&stars=${courseStars}&sales=${courseSales}&poster=${poster}&relayNum=${relayNum}&coursePrice=${coursePrice}`})
     },
   },
   onReachBottom(){
@@ -98,7 +107,7 @@ export default {
   },
   computed: {
     hasNext(){
-      return this.renderList.length < this.total
+      return this.hasReady && this.renderList.length < this.total
     }
   },
   components: {},
@@ -114,10 +123,16 @@ export default {
     padding: 25px;
     background-color: #000;
   }
+  .loading{
+      padding: 30px 0;
+      text-align: center;
+      color: #fff;
+    }
   .live-course {
     background-color: #2d2d2d;
     padding: 48px 40px 48px 60px;
     margin-bottom: 10px;
+    
     .s-center{
       margin-bottom: 20px;
     }
@@ -141,7 +156,12 @@ export default {
       }
     }
   }
-
+  .no-course{
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    padding: 30px 45px;
+  }
 }
 .swiper {
   height: 296px;

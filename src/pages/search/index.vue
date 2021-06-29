@@ -1,7 +1,7 @@
 <template>
   <view class="index">
     <view class="search">
-      <input type="text" focus @input="onChange" />
+      <input type="text" focus @input="onChange" v-model="value"/>
       <text @tap="search">搜索</text>
     </view>
 
@@ -33,7 +33,7 @@
         :videoId="item.ossVideoId"
         :handleTap="toPlay"
       /> -->
-      <view class="s-course" @tap="toPlay">
+      <view class="s-course" @tap="toPlay(index)">
         <view class="title f-30 c-fff">{{item.courseName}}</view>
         <view class="info flex f-fd-r f-jc-sb">
           <view class="teacher flex ">
@@ -92,7 +92,7 @@ export default {
       key: "searchList",
       success: (res) => {
         if (res.data.length !== 0) {
-          (this.storageFlag = true), (this.storageList = res.data);
+          (this.storageFlag = true), (this.storageList = Array.from(new Set(res.data)));
         }
       },
     });
@@ -183,6 +183,7 @@ export default {
     },
     showCourse(name) {
       let courseName = name;
+      this.value = name
       request
         .get({
           url: "api/recommendCourse/searchCourse",
@@ -245,8 +246,8 @@ export default {
         },
       });
     },
-    toPlay(videoId, playId, sales, stars, poster) {
-      Taro.navigateTo({url: `/pages/play/index?source=${1}&courseId=${videoId}&playId=${playId}&sales=${sales}&stars=${stars}&poster=${poster}`})
+    toPlay(index) {
+      Taro.navigateTo({url: `/pages/slide/index?courseName=${this.value}&type=3&startIndex=${index}`})
     },
   },
   components: {

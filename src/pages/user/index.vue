@@ -8,7 +8,7 @@
       <image src="https://www.shenfu.online/pic/icon/user.png"></image>
       <button
         class="userName loginbtn"
-        @tap="login"
+        @getuserinfo="getUserInfo"
         open-type="getUserInfo"
         style="background: black"
       >
@@ -61,7 +61,7 @@ export default {
     this.isLogin && this.getBookInfo();
   },
   onLoad() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
@@ -69,6 +69,46 @@ export default {
       this.getWxCode();
       this.getStorageUserToken();
     },
+
+    checkLogin(){
+      this.getStorageUserToken();
+    },
+
+    getUserInfo(e) {
+      const userInfo = e.detail.userInfo;
+      const { avatarUrl, gender, nickName } = userInfo;
+      this.userInfo = userInfo
+      console.log(userInfo);
+      Taro.login({
+        success: (res) => {
+          console.log(res);
+          if (res.code) {
+            API.userLogin({ code: res.code, avatarUrl, gender, nickName }).then((res) => {
+              const {
+                subjectId,
+                textbookVersionId,
+                textbookId,
+                token,
+              } = res?.data?.data;
+              if (res?.data?.data?.token) {
+                this.isLogin = true;
+                Taro.setStorage({
+                  key: "userToken",
+                  data: token,
+                  success: () => {
+                    this.getBookInfo();
+                  },
+                });
+              }
+            });
+          }
+        },
+        fail: (err) => {
+          console.log(err);
+        },
+      });
+    },
+
     getWxUserInfo() {
       Taro.getUserInfo({
         success: (res) => {
@@ -104,10 +144,10 @@ export default {
       Taro.getStorage({
         key: "userToken",
         success: () => {
-          this.isLogin = true
-          this.getBookInfo()
-        }
-      })
+          this.isLogin = true;
+          this.getBookInfo();
+        },
+      });
     },
     getWxCode() {
       Taro.login({
@@ -132,7 +172,7 @@ export default {
             return;
           }
           if (confirm) {
-            this.handleLogin()
+            this.handleLogin();
           }
         },
       });
@@ -153,7 +193,7 @@ export default {
             key: "userToken",
             data: token,
             success: () => {
-              this.getBookInfo()
+              this.getBookInfo();
             },
           });
         }

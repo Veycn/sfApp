@@ -1,0 +1,169 @@
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.similar {
+  width: 100%;
+  height: 100%;
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+
+    .swiper-item{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .my-video {
+        width: 750px;
+        height: 100%;
+        &.small{
+          width: 750px;
+          height: 400px;
+          transform: translateY(-100px);
+        }
+      }
+    }
+  }
+}
+
+.operation {
+  position: absolute;
+  right: 0;
+  bottom: 40px;
+  padding: 36px;
+  z-index: 1000;
+
+  .operate {
+    text-align: center;
+    margin-top: 30px;
+    color: #fff;
+
+    .share {
+      border: none;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      line-height: 1;
+
+      &::after {
+        outline: none;
+        border: none;
+      }
+    }
+
+    .operate-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 50px;
+      font-weight: bold;
+
+      &.big {
+        font-size: 80px;
+      }
+
+      &.icon-like1 {
+        color: red;
+      }
+    }
+
+    .operate-desc {
+      font-size: 20px;
+    }
+  }
+}
+
+.stop{
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  .img{
+    width: 100%;
+    height: 100%;
+    transform: translateY(-100px);
+    display: inline-block;
+  }
+}
+
+
+.video-info{
+  position: absolute;
+  width: 100vw;
+  bottom: 0;
+  padding: 20px 20px 78px 40px;
+  color: #fff;
+  .base-info{
+    .video-desc{
+      .title{
+        font-size: 30px;
+        font-weight: bold;
+      }
+      .introduction{
+        margin-top: 24px;
+        font-size: 20px;
+        color: #fefefe;
+        font-weight: 400;
+      }
+    }
+    .buy-info{
+      margin-top: 42px;
+      .buy-btn{
+        width: 200px;
+        height: 50px;
+        background-color: #15EC89;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 30px;
+        font-weight: bold;
+        color: #000;
+      }
+      .buy-price{
+        font-size: bold;
+        color: #17E871;
+        margin-left: 38px;
+        align-self: flex-end;
+        height: 50px;
+        .price{
+          font-size: 48px;
+        }
+        .yuan{
+          font-size: 24px;
+        }
+      }
+      .buy-users{
+        margin-left: 42px;
+        font-size: 20px;
+        font-weight: 400;
+        align-self: flex-end;
+        position: relative;
+        top: 6px;
+      }
+    }
+  }
+  .teacher-info{
+    font-size: 20px;
+    color: #fff;
+    .avatar{
+      width: 72px;
+      height: 72px;
+      image{
+        width: 72px;
+        height: 72px;
+        display: inline-block;
+        border-radius: 50%;
+      }
+    }
+    .info{
+      .info-desc{
+        margin-top: 10px;
+      }
+    }
+  }
+}

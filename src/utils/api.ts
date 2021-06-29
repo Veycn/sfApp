@@ -46,7 +46,7 @@ const API = {
   // 给课程点赞
   starCourse(params){
     return Services.post({
-      url: `/api/userCourse/updateCourseStars?courseId=${params.courseId}&courseStars=${params.courseStars}`,
+      url: `/api/userCourse/updateCourseStars?courseId=${params.courseId}&type=${params.type}`,
       params
     })
   },
@@ -54,6 +54,18 @@ const API = {
   getPayInfo(params){
     return Services.post({
       url: `api/wxPay/placeOrder?courseId=${params.courseId}`,
+      params
+    })
+  },
+  getPlayInfo(params){
+    return Services.post({
+      url: `api/recommendCourse/getCourseInfo`,
+      params
+    })
+  },
+  updatePlayNum(params){
+    return Services.post({
+      url: `api/userCourse/updatePlayNum?courseId=${params.courseId}`,
       params
     })
   },
@@ -90,6 +102,11 @@ const API = {
   getLiveCourse(params){
     return Services.get({
       url: `api/recommendCourse/getSimpleLiveCourse?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+    })
+  },
+  getSearchCourse(params){
+    return Services.get({
+      url: `api/recommendCourse/searchCourse?courseName=${params.courseName}`,
     })
   },
   getMyLikeCourse(params){
