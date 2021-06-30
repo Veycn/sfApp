@@ -376,7 +376,6 @@ export default {
           prevPage.setData({
             examId: this.examId,
           });
-          prevPage.getList(prevPage.data.examId);
           Taro.navigateBack({
             delta: 1,
           });
