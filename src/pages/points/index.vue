@@ -60,10 +60,11 @@ export default {
     };
   },
   onLoad: async function (options) {
-    let { examId } = options;
-    this.getList(examId);
+    this.examId = options.examId;
   },
-  onShow() {},
+  onShow() {
+    this.getList(this.examId)
+  },
   methods: {
     async getList(id) {
       const res = await request.get({
