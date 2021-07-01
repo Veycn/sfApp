@@ -79,6 +79,10 @@ export default {
       const { avatarUrl, gender, nickName } = userInfo;
       this.userInfo = userInfo
       console.log(userInfo);
+      Taro.setStorage({
+        key: 'userInfo',
+        data: userInfo,
+      })
       Taro.login({
         success: (res) => {
           console.log(res);
@@ -110,16 +114,22 @@ export default {
     },
 
     getWxUserInfo() {
-      Taro.getUserInfo({
-        success: (res) => {
+      Taro.getStorage({
+        key: 'userInfo',
+        success: res => {
           console.log(res);
-          this.userInfo = res.userInfo;
-          Taro.setStorage({
-            key: "userInfo",
-            data: res.userInfo,
-          });
-        },
-      });
+          this.userInfo = res.data
+        }
+      })
+      // Taro.getUserInfo({
+      //   success: (res) => {
+      //     this.userInfo = res.userInfo;
+      //     Taro.setStorage({
+      //       key: "userInfo",
+      //       data: res.userInfo,
+      //     });
+      //   },
+      // });
     },
     getStorageUserInfo() {
       Taro.getStorage({
@@ -152,7 +162,6 @@ export default {
     getWxCode() {
       Taro.login({
         success: (res) => {
-          console.log(res);
           this.code = res.code;
         },
       });

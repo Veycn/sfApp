@@ -27,32 +27,32 @@ export default {
       {
         pagePath: "pages/customize/index",
         text: "首页",
-        iconPath: "assets/tab/ic_home.png",
-        selectedIconPath: "assets/tab/ic_home_a.png"
+        iconPath: "assets/tab/home.png",
+        selectedIconPath: "assets/tab/home_a.png"
       },
       {
         pagePath: "pages/live/index",
         text: "直播课",
-        iconPath: "assets/tab/ic_live.png",
-        selectedIconPath: "assets/tab/ic_live_a.png"
+        iconPath: "assets/tab/live.png",
+        selectedIconPath: "assets/tab/live_a.png"
       },
       {
         pagePath: "pages/detect/index",
         text: "检测",
-        iconPath: "assets/tab/ic_check.png",
-        selectedIconPath: "assets/tab/ic_check_a.png"
+        iconPath: "assets/tab/check.png",
+        selectedIconPath: "assets/tab/check_a.png"
       },
       {
         pagePath: "pages/mycourse/index",
         text: "课程",
-        iconPath: "assets/icon/c.png",
-        selectedIconPath: "assets/icon/c_active.png"
+        iconPath: "assets/tab/course.png",
+        selectedIconPath: "assets/tab/course_a.png"
       },
       {
         pagePath: "pages/user/index",
         text: "我的",
-        iconPath: "assets/icon/c.png",
-        selectedIconPath: "assets/icon/c_active.png"
+        iconPath: "assets/tab/mine.png",
+        selectedIconPath: "assets/tab/mine_a.png"
       }
     ],
     color: "#ffffff",
