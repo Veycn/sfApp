@@ -15,7 +15,7 @@
           <template v-if="current == index">
             <video
               id="myVideo"
-              :class="['my-video', currentVideo.courseType < 3 ? 'small' : '']"
+              :class="['my-video', currentVideo.videoType == 1 ? 'small' : '']"
               :src="playInfos[index].playURL"
               object-fit="cover"
               :loop="false"
@@ -104,6 +104,11 @@ export default {
     startIndex: {
       type: Number | String,
       default: 0
+    },
+
+    page: {
+      type: Number | String,
+      default: 0
     }
   },
   data() {
@@ -127,6 +132,7 @@ export default {
   },
   created() {
     this.videoContext = Taro.createVideoContext("myVideo");
+    this.pageNum = this.page > 0 ? this.page - 1 : 0;
     this.useHelper()
     if(this.startIndex){
       this.current = this.startIndex
@@ -168,7 +174,7 @@ export default {
         const list = res.data.data || []
         const ids = list.map(v => v.courseId)
         this.list = this.list.concat(list)
-        this.currentVideo = list[0]
+        this.currentVideo = list[this.current] || {}
         this.getIsStar(list[0].courseId)
         this.getPlayInfo(ids)
         this.total = (res.data.data || []).length
@@ -179,10 +185,11 @@ export default {
         pageNum: ++this.pageNum,
         pageSize: this.pageSize
       }).then(res => {
+        console.log(this.pageNum);
         const list = res?.data?.data?.list || []
         const ids = list.map(v => v.id)
         this.list = this.list.concat(list)
-        this.currentVideo = list[0]
+        this.currentVideo = list[this.current] || {}
         this.total = res?.data?.data?.total || 0
         this.getPlayInfo(ids)
         this.getIsStar(list[0].id)
@@ -193,7 +200,7 @@ export default {
         const list = res?.data?.data || []
         const ids = list.map(v => v.courseId)
         this.list = this.list.concat(list)
-        this.currentVideo = list[0]
+        this.currentVideo = list[this.current] || {}
         this.total = list.length || 0
         this.getPlayInfo(ids)
         this.getIsStar(list[0].courseId)
@@ -207,7 +214,7 @@ export default {
         const list = res?.data?.data?.list || [];
         const ids = list.map(v => v.id)
         this.list = this.list.concat(list)
-        this.currentVideo = list[0]
+        this.currentVideo = list[this.current] || {}
         this.total = res?.data?.data?.total || 0
         this.getPlayInfo(ids)
         this.getIsStar(list[0].id)

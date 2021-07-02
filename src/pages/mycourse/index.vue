@@ -62,8 +62,8 @@
           </view>
         </view>
       </template>
-      <view class="no" v-if="activeTab == 'buy' && !myBuys.length">你还没有相关课程～</view>
-      <view class="no" v-if="activeTab == 'like' && !myLike.length">你还没有相关课程～</view>
+      <view class="no" v-if="buyHasReady && activeTab == 'buy' && !myBuys.length">你还没有相关课程～</view>
+      <view class="no" v-if="likeHasReady && activeTab == 'like' && !myLike.length">你还没有相关课程～</view>
     </view>
   </view>
 </template>
@@ -104,6 +104,8 @@ export default {
       this.likePageNum = 0;
       this.buyTotal = 0;
       this.likeTotal = 0;
+      this.buyHasReady = false;
+      this.likeHasReady = false;
       this.getMyBuyCourse();
       this.getMyLikeCourse();
     },
@@ -112,7 +114,11 @@ export default {
         pageNo: ++this.buyPageNum,
         pageSize: this.buyPageSize,
       }).then((res) => {
-        this.myBuys = this.myBuys.concat(res?.data?.data?.list || []);
+        const resList = res?.data?.data?.list || []
+        if(!resList.length && this.buyPageNum){
+          this.buyPageNum = this.buyPageNum - 1
+        }
+        this.myBuys = this.myBuys.concat(resList);
         this.buyTotal = res?.data?.data?.total || 0;
         this.buyHasReady = true
       });
@@ -122,7 +128,11 @@ export default {
         pageNo: ++this.likePageNum,
         pageSize: this.likePageSize,
       }).then((res) => {
-        this.myLike = this.myLike.concat(res?.data?.data?.list || []);
+        const resList = res?.data?.data?.list || []
+        if(!resList.length && this.likePageNum){
+          this.likePageNum = this.likePageNum - 1
+        }
+        this.myLike = this.myLike.concat(resList);
         this.likeTotal = res?.data?.data?.total || 0;
         this.likeHasReady = true
       });
@@ -132,15 +142,17 @@ export default {
     },
     toPlay(videoIdOrIndex, playId, sales, stars, poster, relayNum) {
       if (this.activeTab === "like") {
-        return Taro.navigateTo({ url: `/pages/slide/index?type=4&startIndex=${videoIdOrIndex}` });
+        if(this.likePageNum > 0){
+          videoIdOrIndex = (videoIdOrIndex - this.likePageSize)
+        }
+        return Taro.navigateTo({ url: `/pages/slide/index?type=4&startIndex=${videoIdOrIndex}&page=${this.likePageNum}` });
       }
       Taro.navigateTo({
-        url: `/pages/play/index?source=${1}&courseId=${videoIdOrIndex}&playId=${playId}&sales=${sales}&stars=${stars}&poster=${poster}&relayNum=${relayNum}`,
+        url: `/pages/play/index?source=1&courseId=${videoIdOrIndex}&playId=${playId}&sales=${sales}&stars=${stars}&poster=${poster}&relayNum=${relayNum}`,
       });
     },
   },
   onReachBottom() {
-    console.log(1);
     if (this.activeTab === "buy") {
       this.getMyBuyCourse();
     } else {
